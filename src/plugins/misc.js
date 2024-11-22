@@ -163,15 +163,16 @@ cmd({
     }
 });
 
-// Quran command
+
+// Quran Command
 cmd({
     pattern: "quran",
     description: "Search and send Quran Surahs.",
     type: "misc",
     isPremium: false,
-    execute: async (m, sock, mek, config) => {
+    execute: async (m, sock, mek, config, startTime, sendButtonMessage, replyHandlers) => {
         try {
-            const query = m.message.conversation.split(" ").slice(1).join(" ").trim(); // Extract the search query
+            const query = m.message.conversation.split(" ").slice(1).join(" ").trim();
             if (!query) {
                 await sock.sendMessage(mek.remoteJid, {
                     text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
@@ -204,46 +205,38 @@ cmd({
             resultMessage += `\n*Reply with the number (e.g., 1.0) to get the surah.*`;
             await sock.sendMessage(mek.remoteJid, { text: resultMessage });
 
-            // Handle user reply for sending the audio
-            sock.ev.on('messages.upsert', async (messageUpdate) => {
-                const replyMessage = messageUpdate.messages[0];
-                if (replyMessage.key.remoteJid === mek.remoteJid && !replyMessage.key.fromMe) {
-                    if (
-                        replyMessage.message.extendedTextMessage &&
-                        replyMessage.message.extendedTextMessage.contextInfo &&
-                        replyMessage.message.extendedTextMessage.contextInfo.quotedMessage &&
-                        replyMessage.message.extendedTextMessage.contextInfo.quotedMessage.conversation.includes("Search Results for")
-                    ) {
-                        const number = replyMessage.message.conversation.trim();
-                        const [index, subIndex] = number.split(".").map(Number);
+            // Register reply handler for this interaction
+            replyHandlers[mek.remoteJid] = {
+                context: resultMessage,
+                handler: async (replyMessage, sock, mek, config) => {
+                    const number = replyMessage.message.conversation.trim();
+                    const [index, subIndex] = number.split(".").map(Number);
 
-                        if (
-                            !isNaN(index) &&
-                            !isNaN(subIndex) &&
-                            reciters[index - 1]
-                        ) {
-                            const [reciterName, surahs] = reciters[index - 1];
-                            const surahEntries = Object.entries(surahs);
-                            if (surahEntries[subIndex]) {
-                                const [surahName, surahUrl] = surahEntries[subIndex];
-                                await sock.sendMessage(mek.remoteJid, {
-                                    audio: { url: surahUrl },
-                                    mimetype: "audio/mp4",
-                                    caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                                });
-                            } else {
-                                await sock.sendMessage(mek.remoteJid, {
-                                    text: "❌ Invalid number. Please reply with a valid number.",
-                                });
-                            }
+                    if (!isNaN(index) && !isNaN(subIndex) && reciters[index - 1]) {
+                        const [reciterName, surahs] = reciters[index - 1];
+                        const surahEntries = Object.entries(surahs);
+                        if (surahEntries[subIndex]) {
+                            const [surahName, surahUrl] = surahEntries[subIndex];
+                            await sock.sendMessage(mek.remoteJid, {
+                                audio: { url: surahUrl },
+                                mimetype: "audio/mp4",
+                                caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                            });
+
+                            // Remove handler after successful reply
+                            delete replyHandlers[mek.remoteJid];
                         } else {
                             await sock.sendMessage(mek.remoteJid, {
                                 text: "❌ Invalid number. Please reply with a valid number.",
                             });
                         }
+                    } else {
+                        await sock.sendMessage(mek.remoteJid, {
+                            text: "❌ Invalid number. Please reply with a valid number.",
+                        });
                     }
-                }
-            });
+                },
+            };
         } catch (error) {
             console.error("Error in Quran command:", error);
             await sock.sendMessage(mek.remoteJid, {
@@ -252,7 +245,6 @@ cmd({
         }
     },
 });
-
 
 
 module.exports = commands, { cmd };

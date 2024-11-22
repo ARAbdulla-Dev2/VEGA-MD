@@ -208,30 +208,44 @@ async function VEGAmdSock() {
         }
     });
 
-    sock.ev.on('messages.upsert', VEGAmdMsg => {
-        const mek = VEGAmdMsg.messages[0].key;
-        const m = VEGAmdMsg.messages[0];
-        let msg;
-    
-        if (m && m.message && m.message.extendedTextMessage || m && m.message && m.message.conversation) {
-            msg = m.message.extendedTextMessage?.text || m.message.conversation || null;
-        }
+    // Global object to track pending reply interactions
+const replyHandlers = {};
 
-        if (msg && mek.remoteJid === config.OWNER.number + '@s.whatsapp.net' || msg && mek.participant === config.OWNER.number + '@s.whatsapp.net'){
-            sock.sendMessage(mek.remoteJid, { react: { text: config.OWNER.emoji , key: mek }});
+sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
+    const mek = VEGAmdMsg.messages[0].key;
+    const m = VEGAmdMsg.messages[0];
+    let msg;
+
+    if (m && m.message && (m.message.extendedTextMessage || m.message.conversation)) {
+        msg = m.message.extendedTextMessage?.text || m.message.conversation || null;
+    }
+
+    if (msg && mek.remoteJid === config.OWNER.number + '@s.whatsapp.net' || msg && mek.participant === config.OWNER.number + '@s.whatsapp.net') {
+        sock.sendMessage(mek.remoteJid, { react: { text: config.OWNER.emoji, key: mek } });
+    }
+
+    // Check for command
+    if (msg && msg.startsWith(config.SETTINGS.prefix)) {
+        const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(' ')[0].toLowerCase();
+        const command = commands.find(cmd => cmd.pattern === commandName);
+        if (command) {
+            await command.execute(m, sock, mek, config, startTime, sendButtonMessage, replyHandlers);
         }
-    
-        if (msg && msg.startsWith(config.SETTINGS.prefix)) {
-            sock.readMessages([mek]);
-            const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(' ')[0].toLowerCase();
-    
-            const command = commands.find(cmd => cmd.pattern === commandName);
-            if (command) {
-                command.execute(m, sock, mek, config, startTime, sendButtonMessage);
-            }
+        return;
+    }
+
+    // Handle replies for ongoing interactions
+    if (m.message.extendedTextMessage?.contextInfo?.quotedMessage) {
+        const quotedText = m.message.extendedTextMessage.contextInfo.quotedMessage.conversation;
+        const replyHandler = replyHandlers[mek.remoteJid];
+
+        if (replyHandler && replyHandler.context === quotedText) {
+            // Pass the reply to the relevant plugin
+            await replyHandler.handler(m, sock, mek, config);
         }
-        
-    });
+    }
+});
+
     
     sock.ev.on('creds.update', saveCreds);
 }
