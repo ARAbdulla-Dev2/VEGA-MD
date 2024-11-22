@@ -58,15 +58,19 @@ cmd({
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
         try {
-            // Ensure the command is executed by the owner
-            if (mek.remoteJid !== config.OWNER.number + "@s.whatsapp.net") {
+            const botNumber = formatUserId(sock.user.id);
+            const participant = mek.participant || mek.remoteJid;
+            const isOwner = participant === config.OWNER.number + "@s.whatsapp.net" || participant === botNumber;
+
+            // Ensure the user is the owner or the bot itself
+            if (!isOwner) {
                 await sock.sendMessage(mek.remoteJid, {
-                    text: "*❌ Only the owner can use this.*",
+                    text: "*❌ Only the owner or bot itself can use this command.*",
                 });
                 return;
             }
 
-            // Ensure the command is executed as a reply
+            // Ensure the command is executed as a reply to a message
             if (!m.message?.extendedTextMessage?.contextInfo?.quotedMessage) {
                 await sock.sendMessage(mek.remoteJid, {
                     text: "*❗ Reply to the message you want to forward.*",
@@ -79,26 +83,28 @@ cmd({
             const quotedRemoteJid = m.message.extendedTextMessage.contextInfo.participant || m.remoteJid;
             const quotedMessage = m.message.extendedTextMessage.contextInfo.quotedMessage;
 
-            // Extract numbers from the command
+            // Extract targets from the command text
             const commandText = m.message.conversation || m.message.extendedTextMessage.text;
             const rawTargets = commandText
-                .replace(/^(\.forward|forward)\s*/i, "") // Remove the command prefix
-                .split(",") // Split by comma
+                .replace(/^(\.forward|forward)\s*/i, "") // Remove command prefix
+                .split(",") // Split by commas
                 .map((num) => num.trim()); // Clean up extra spaces
 
-            // Validate and normalize numbers
+            // Validate and normalize target numbers/groups
             const targets = rawTargets
-                .filter((num) => /^(\+?\d+|[\d]+@s\.whatsapp\.net)$/i.test(num)) // Validate number formats
+                .filter((num) => /^(\d+@s\.whatsapp\.net|[\w-]+@g\.us)$/i.test(num)) // Match valid JIDs
                 .map((num) => {
-                    if (num.startsWith("+")) num = num.slice(1); // Remove the '+' if present
-                    if (!num.includes("@s.whatsapp.net")) num += "@s.whatsapp.net"; // Ensure proper JID
+                    if (num.startsWith("+")) num = num.slice(1); // Remove '+' if present
+                    if (!num.includes("@")) {
+                        num += num.endsWith("g.us") ? "@g.us" : "@s.whatsapp.net"; // Ensure valid domain
+                    }
                     return num;
                 });
 
-            // If no valid numbers are found
+            // If no valid targets
             if (!targets.length) {
                 await sock.sendMessage(mek.remoteJid, {
-                    text: "*⚠️ No valid numbers to forward.*\n\nTry: `.forward 94xxxxxxxxx`",
+                    text: "*⚠️ No valid targets specified.*\n\nExample: `.forward 94xxxxxxxxx@g.us` or `.forward 94xxxxxxxxx@g.us,abcdxxxxxx@g.us`",
                 });
                 return;
             }
@@ -116,18 +122,24 @@ cmd({
                 });
             }
 
-            // Send a confirmation message
+            // Send confirmation
             await sock.sendMessage(mek.remoteJid, {
-                text: `*✅ Forwarded to ${targets.length} recipient(s)!*\n> *VEGA-MD v1.0* ✨`,
+                text: `*✅ Successfully forwarded to ${targets.length} recipient(s)!*`,
             });
         } catch (error) {
-            console.error("Error forwarding message:", error);
+            console.error("Error in forward command:", error);
             await sock.sendMessage(mek.remoteJid, {
-                text: "*❌ Failed to forward. Try again.*",
+                text: "*❌ Failed to forward. Please try again.*",
             });
         }
     },
 });
+
+// Utility function to normalize bot's ID
+function formatUserId(userId) {
+    return userId.replace(/:\d+@s\.whatsapp\.net$/, "@s.whatsapp.net");
+}
+
 
 
 // Wid command
