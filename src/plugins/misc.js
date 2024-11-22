@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 global.commands = [];
 
 function cmd(command) {
@@ -160,6 +162,97 @@ cmd({
         }
     }
 });
+
+// Quran command
+cmd({
+    pattern: "quran",
+    description: "Search and send Quran Surahs.",
+    type: "misc",
+    isPremium: false,
+    execute: async (m, sock, mek, config) => {
+        try {
+            const query = m.message.conversation.split(" ").slice(1).join(" ").trim(); // Extract the search query
+            if (!query) {
+                await sock.sendMessage(mek.remoteJid, {
+                    text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
+                });
+                return;
+            }
+
+            const apiUrl = `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=quran&query=${encodeURIComponent(query)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (data.status !== "true" || !data.result) {
+                await sock.sendMessage(mek.remoteJid, {
+                    text: `❌ No results found for "${query}". Please try a different query.`,
+                });
+                return;
+            }
+
+            // Prepare the list of results
+            const reciters = Object.entries(data.result);
+            let resultMessage = `*Search Results for "${query}":*\n\n`;
+
+            reciters.forEach(([reciterName, surahs], index) => {
+                Object.entries(surahs).forEach(([surahName, surahUrl], subIndex) => {
+                    const number = `${index + 1}.${subIndex}`; // Format as 1.0, 1.1, etc.
+                    resultMessage += `> *${number}* - ${reciterName} - ${surahName}\n`;
+                });
+            });
+
+            resultMessage += `\n*Reply with the number (e.g., 1.0) to get the surah.*`;
+            await sock.sendMessage(mek.remoteJid, { text: resultMessage });
+
+            // Handle user reply for sending the audio
+            sock.ev.on('messages.upsert', async (messageUpdate) => {
+                const replyMessage = messageUpdate.messages[0];
+                if (replyMessage.key.remoteJid === mek.remoteJid && !replyMessage.key.fromMe) {
+                    if (
+                        replyMessage.message.extendedTextMessage &&
+                        replyMessage.message.extendedTextMessage.contextInfo &&
+                        replyMessage.message.extendedTextMessage.contextInfo.quotedMessage &&
+                        replyMessage.message.extendedTextMessage.contextInfo.quotedMessage.conversation.includes("Search Results for")
+                    ) {
+                        const number = replyMessage.message.conversation.trim();
+                        const [index, subIndex] = number.split(".").map(Number);
+
+                        if (
+                            !isNaN(index) &&
+                            !isNaN(subIndex) &&
+                            reciters[index - 1]
+                        ) {
+                            const [reciterName, surahs] = reciters[index - 1];
+                            const surahEntries = Object.entries(surahs);
+                            if (surahEntries[subIndex]) {
+                                const [surahName, surahUrl] = surahEntries[subIndex];
+                                await sock.sendMessage(mek.remoteJid, {
+                                    audio: { url: surahUrl },
+                                    mimetype: "audio/mp4",
+                                    caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                                });
+                            } else {
+                                await sock.sendMessage(mek.remoteJid, {
+                                    text: "❌ Invalid number. Please reply with a valid number.",
+                                });
+                            }
+                        } else {
+                            await sock.sendMessage(mek.remoteJid, {
+                                text: "❌ Invalid number. Please reply with a valid number.",
+                            });
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Error in Quran command:", error);
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ An error occurred while processing your request. Please try again.",
+            });
+        }
+    },
+});
+
 
 
 module.exports = commands, { cmd };
