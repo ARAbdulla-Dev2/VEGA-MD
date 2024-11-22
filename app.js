@@ -126,8 +126,7 @@ const requiredDirs = [
     path.join(__dirname, 'src', 'plugins', 'arabdullah.dev'),
     path.join(__dirname, 'src', 'media', 'image', 'arabdullah.dev'),
     path.join(__dirname, 'src', 'media', 'audio', 'arabdullah.dev'),
-    path.join(__dirname, 'src', 'media', 'video', 'arabdullah.dev'),
-    path.join(__dirname, 'VEGAmdSession', 'arabdullah.dev')
+    path.join(__dirname, 'src', 'media', 'video', 'arabdullah.dev')
 ];
 
 function formatUserId(userId) {
