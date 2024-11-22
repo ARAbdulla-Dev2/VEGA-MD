@@ -208,7 +208,7 @@ async function VEGAmdSock() {
         }
     });
 
-    // Global object to track pending reply interactions
+// Global object to track pending reply interactions
 const replyHandlers = {};
 
 sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
@@ -235,17 +235,26 @@ sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
     }
 
     // Handle replies for ongoing interactions
-    if (m.message.extendedTextMessage?.contextInfo?.quotedMessage) {
+    if (
+        m?.message?.extendedTextMessage?.contextInfo?.quotedMessage &&
+        m.message.extendedTextMessage.contextInfo.quotedMessage.conversation
+    ) {
         const quotedText = m.message.extendedTextMessage.contextInfo.quotedMessage.conversation;
         const replyHandler = replyHandlers[mek.remoteJid];
 
         if (replyHandler && replyHandler.context === quotedText) {
             // Pass the reply to the relevant plugin
-            await replyHandler.handler(m, sock, mek, config);
+            try {
+                await replyHandler.handler(m, sock, mek, config);
+            } catch (error) {
+                console.error("Error in reply handler:", error);
+                sock.sendMessage(mek.remoteJid, {
+                    text: "❌ An error occurred while processing your reply.",
+                });
+            }
         }
     }
 });
-
     
     sock.ev.on('creds.update', saveCreds);
 }
