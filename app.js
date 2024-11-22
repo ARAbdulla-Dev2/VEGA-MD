@@ -220,10 +220,6 @@ sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
         msg = m.message.extendedTextMessage?.text || m.message.conversation || null;
     }
 
-    if (msg && mek.remoteJid === config.OWNER.number + '@s.whatsapp.net' || msg && mek.participant === config.OWNER.number + '@s.whatsapp.net') {
-        sock.sendMessage(mek.remoteJid, { react: { text: config.OWNER.emoji, key: mek } });
-    }
-
     // Check for command
     if (msg && msg.startsWith(config.SETTINGS.prefix)) {
         const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(' ')[0].toLowerCase();
@@ -255,6 +251,7 @@ sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
         }
     }
 });
+
     
     sock.ev.on('creds.update', saveCreds);
 }

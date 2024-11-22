@@ -170,8 +170,13 @@ cmd({
     description: "Search and send Quran Surahs.",
     type: "misc",
     execute: async (m, sock, mek, config, startTime, sendButtonMessage, replyHandlers) => {
-        const query = m.message.conversation.split(" ").slice(1).join(" ").trim();
-        if (!query) {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        const command = args.shift().toLowerCase(); // Extract command and normalize to lowercase
+        const query = args.join(" ").trim(); // Join remaining parts as the query
+
+        // Ensure the command matches and a query is provided
+        if (command !== ".quran" || !query) {
             await sock.sendMessage(mek.remoteJid, {
                 text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
             });
@@ -184,14 +189,15 @@ cmd({
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            if (data.status !== "true" || !data.result) {
+            // Handle invalid or empty results
+            if (data.status !== "true" || !data.result || Object.keys(data.result).length === 0) {
                 await sock.sendMessage(mek.remoteJid, {
                     text: `❌ No results found for "${query}". Please try a different query.`,
                 });
                 return;
             }
 
-            // Prepare reply
+            // Prepare the results for user reply
             const reciters = Object.entries(data.result);
             let resultMessage = `*Search Results for "${query}":*\n\n`;
             reciters.forEach(([reciterName, surahs], index) => {
@@ -202,38 +208,63 @@ cmd({
             resultMessage += `\n*Reply with the number (e.g., 0.1) to get the surah.*`;
             await sock.sendMessage(mek.remoteJid, { text: resultMessage });
 
-            // Add reply handler
-            replyHandlers[mek.remoteJid] = {
-                context: resultMessage,
-                handler: async (reply, sock, mek, config) => {
-                    const replyText = reply.message.conversation.trim();
-                    const [reciterIndex, surahIndex] = replyText.split(".").map(Number);
-                    const [reciterName, surahs] = reciters[reciterIndex] || [];
-                    const surahEntries = Object.entries(surahs || {});
-                    const [surahName, surahUrl] = surahEntries[surahIndex] || [];
+            // Set up a reply handler for this specific context
+            // Set up a reply handler for this specific context
+replyHandlers[mek.remoteJid] = {
+    context: resultMessage,
+    handler: async (reply, sock, mek, config) => {
+        const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
 
-                    if (surahName && surahUrl) {
-                        await sock.sendMessage(mek.remoteJid, {
-                            audio: { url: surahUrl },
-                            mimetype: "audio/mp4",
-                            caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                        });
-                    } else {
-                        await sock.sendMessage(mek.remoteJid, {
-                            text: "❌ Invalid selection. Please reply with a valid number.",
-                        });
-                    }
-                },
-            };
+        // Make sure replyText exists
+        if (!replyText) {
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Invalid reply. Please reply with a valid number." });
+            return;
+        }
+
+        const trimmedReply = replyText.trim();
+
+        // Split the reply and check if it's valid
+        const [reciterIndexStr, surahIndexStr] = trimmedReply.split(".").map(num => num.trim());
+
+        const reciterIndex = parseInt(reciterIndexStr, 10);
+        const surahIndex = parseInt(surahIndexStr, 10);
+
+        // Check if the indices are valid and within bounds
+        if (
+            !isNaN(reciterIndex) &&
+            !isNaN(surahIndex) &&
+            reciterIndex >= 0 &&
+            reciterIndex < reciters.length &&
+            surahIndex >= 0 &&
+            surahIndex < Object.entries(reciters[reciterIndex][1]).length
+        ) {
+            const [reciterName, surahs] = reciters[reciterIndex];
+            const surahEntries = Object.entries(surahs);
+            const [surahName, surahUrl] = surahEntries[surahIndex];
+
+            if (surahName && surahUrl) {
+                await sock.sendMessage(mek.remoteJid, {
+                    audio: { url: surahUrl },
+                    mimetype: "audio/mp4",
+                    caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                });
+            }
+        } else {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ Invalid selection. Please reply with a valid number.",
+            });
+        }
+    },
+};
+
         } catch (error) {
             console.error("Error in Quran command:", error);
             await sock.sendMessage(mek.remoteJid, {
-                text: "❌ An error occurred while processing your request.",
+                text: "❌ An error occurred while processing your request. Please try again later.",
             });
         }
     },
 });
-
 
 
 module.exports = commands, { cmd };
