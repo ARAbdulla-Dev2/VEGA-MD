@@ -17,17 +17,38 @@ cmd({
     type: "misc",
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
-        const response = await sock.sendMessage(mek.remoteJid, { text: "*Pinging...*" });
-        const start = Date.now();
-        await sock.sendMessage(mek.remoteJid, { text: "*[□□□□□]*", edit: response.key });
-        await sock.sendMessage(mek.remoteJid, { text: `*[■□□□□]*`, edit: response.key });
-        await sock.sendMessage(mek.remoteJid, { text: `*[■■■□□]*`, edit: response.key });
-        await sock.sendMessage(mek.remoteJid, { text: `*[■■■■□]*`, edit: response.key });
-        await sock.sendMessage(mek.remoteJid, { text: `*[■■■■■]*`, edit: response.key });
-        const latency = Date.now() - start;
-        await sock.sendMessage(mek.remoteJid, { text: `*${latency}ms*`, edit: response.key });
-    }
+        try {
+            // Send initial "Pinging..." message
+            const response = await sock.sendMessage(mek.remoteJid, { text: "*Pinging...*" });
+
+            // Start the ping process and calculate latency
+            const start = Date.now();
+            
+            // Update the message with progress bars
+            await sock.sendMessage(mek.remoteJid, { text: "*[□□□□□]*", edit: response.key });
+            await delay(500); // Add delay for better user experience
+            await sock.sendMessage(mek.remoteJid, { text: "*[■□□□□]*", edit: response.key });
+            await delay(500);
+            await sock.sendMessage(mek.remoteJid, { text: "*[■■■□□]*", edit: response.key });
+            await delay(500);
+            await sock.sendMessage(mek.remoteJid, { text: "*[■■■■□]*", edit: response.key });
+            await delay(500);
+            await sock.sendMessage(mek.remoteJid, { text: "*[■■■■■]*", edit: response.key });
+            
+            // Calculate and send latency
+            const latency = Date.now() - start;
+            await sock.sendMessage(mek.remoteJid, { text: `*${latency}ms*`, edit: response.key });
+        } catch (error) {
+            console.error("Error in ping command:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "*❌ Error occurred. Please try again later.*" });
+        }
+    },
 });
+
+// Helper function to delay the execution
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // forward command
 cmd({

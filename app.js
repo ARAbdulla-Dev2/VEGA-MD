@@ -161,7 +161,7 @@ async function VEGAmdSock() {
     const sock = makeVEGAmdSock({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
-        browser: ["VEGAmd", "Chrome", "129.0.6668.89"],
+        browser: ["VEGAmd", "Chrome", "132.0.6834.15"],
         syncFullHistory: false,
         auth: state,
         markOnlineOnConnect: true,
