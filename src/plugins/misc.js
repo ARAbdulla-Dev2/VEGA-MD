@@ -169,18 +169,18 @@ cmd({
     pattern: "quran",
     description: "Search and send Quran Surahs.",
     type: "misc",
-    isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage, replyHandlers) => {
-        try {
-            const query = m.message.conversation.split(" ").slice(1).join(" ").trim();
-            if (!query) {
-                await sock.sendMessage(mek.remoteJid, {
-                    text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
-                });
-                return;
-            }
+        const query = m.message.conversation.split(" ").slice(1).join(" ").trim();
+        if (!query) {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
+            });
+            return;
+        }
 
-            const apiUrl = `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=quran&query=${encodeURIComponent(query)}`;
+        // Fetch Quran results
+        const apiUrl = `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=quran&query=${encodeURIComponent(query)}`;
+        try {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
@@ -191,48 +191,36 @@ cmd({
                 return;
             }
 
-            // Prepare the list of results
+            // Prepare reply
             const reciters = Object.entries(data.result);
             let resultMessage = `*Search Results for "${query}":*\n\n`;
-
             reciters.forEach(([reciterName, surahs], index) => {
                 Object.entries(surahs).forEach(([surahName, surahUrl], subIndex) => {
-                    const number = `${index + 1}.${subIndex}`; // Format as 1.0, 1.1, etc.
-                    resultMessage += `> *${number}* - ${reciterName} - ${surahName}\n`;
+                    resultMessage += `> *${index}.${subIndex}* - ${reciterName} - ${surahName}\n`;
                 });
             });
-
-            resultMessage += `\n*Reply with the number (e.g., 1.0) to get the surah.*`;
+            resultMessage += `\n*Reply with the number (e.g., 0.1) to get the surah.*`;
             await sock.sendMessage(mek.remoteJid, { text: resultMessage });
 
-            // Register reply handler for this interaction
+            // Add reply handler
             replyHandlers[mek.remoteJid] = {
                 context: resultMessage,
-                handler: async (replyMessage, sock, mek, config) => {
-                    const number = replyMessage.message.conversation.trim();
-                    const [index, subIndex] = number.split(".").map(Number);
+                handler: async (reply, sock, mek, config) => {
+                    const replyText = reply.message.conversation.trim();
+                    const [reciterIndex, surahIndex] = replyText.split(".").map(Number);
+                    const [reciterName, surahs] = reciters[reciterIndex] || [];
+                    const surahEntries = Object.entries(surahs || {});
+                    const [surahName, surahUrl] = surahEntries[surahIndex] || [];
 
-                    if (!isNaN(index) && !isNaN(subIndex) && reciters[index - 1]) {
-                        const [reciterName, surahs] = reciters[index - 1];
-                        const surahEntries = Object.entries(surahs);
-                        if (surahEntries[subIndex]) {
-                            const [surahName, surahUrl] = surahEntries[subIndex];
-                            await sock.sendMessage(mek.remoteJid, {
-                                audio: { url: surahUrl },
-                                mimetype: "audio/mp4",
-                                caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                            });
-
-                            // Remove handler after successful reply
-                            delete replyHandlers[mek.remoteJid];
-                        } else {
-                            await sock.sendMessage(mek.remoteJid, {
-                                text: "❌ Invalid number. Please reply with a valid number.",
-                            });
-                        }
+                    if (surahName && surahUrl) {
+                        await sock.sendMessage(mek.remoteJid, {
+                            audio: { url: surahUrl },
+                            mimetype: "audio/mp4",
+                            caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                        });
                     } else {
                         await sock.sendMessage(mek.remoteJid, {
-                            text: "❌ Invalid number. Please reply with a valid number.",
+                            text: "❌ Invalid selection. Please reply with a valid number.",
                         });
                     }
                 },
@@ -240,11 +228,12 @@ cmd({
         } catch (error) {
             console.error("Error in Quran command:", error);
             await sock.sendMessage(mek.remoteJid, {
-                text: "❌ An error occurred while processing your request. Please try again.",
+                text: "❌ An error occurred while processing your request.",
             });
         }
     },
 });
+
 
 
 module.exports = commands, { cmd };
