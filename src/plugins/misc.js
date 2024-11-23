@@ -175,7 +175,6 @@ cmd({
         const command = args.shift().toLowerCase(); // Extract command and normalize to lowercase
         const query = args.join(" ").trim(); // Join remaining parts as the query
 
-        // Ensure the command matches and a query is provided
         if (command !== ".quran" || !query) {
             await sock.sendMessage(mek.remoteJid, {
                 text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
@@ -189,6 +188,14 @@ cmd({
             const response = await fetch(apiUrl);
             const data = await response.json();
 
+            // Exit early if `result.message` indicates no surahs were found
+            if (data.result?.message === "No results found for your query.") {
+                await sock.sendMessage(mek.remoteJid, {
+                    text: `❌ No results found for "${query}". Please try a different query.`,
+                });
+                return;
+            }
+
             // Handle invalid or empty results
             if (data.status !== "true" || !data.result || Object.keys(data.result).length === 0) {
                 await sock.sendMessage(mek.remoteJid, {
@@ -197,66 +204,72 @@ cmd({
                 return;
             }
 
-            // Prepare the results for user reply
             const reciters = Object.entries(data.result);
-            let resultMessage = `*Search Results for "${query}":*\n\n`;
+            if (reciters.length === 0) {
+                await sock.sendMessage(mek.remoteJid, {
+                    text: `❌ No results found for "${query}". Please try a different query.`,
+                });
+                return;
+            }
+
+            let resultMessage = `*Search Results for "${query}":*\n\n*Reply with the number (e.g., 1.1) to get the surah.*\n\n`;
             reciters.forEach(([reciterName, surahs], index) => {
                 Object.entries(surahs).forEach(([surahName, surahUrl], subIndex) => {
-                    resultMessage += `> *${index}.${subIndex}* - ${reciterName} - ${surahName}\n`;
+                    resultMessage += `📖 *${index + 1}.${subIndex + 1}* - ${reciterName} - ${surahName}\n`;
                 });
             });
-            resultMessage += `\n*Reply with the number (e.g., 0.1) to get the surah.*`;
+
+            if (resultMessage.trim() === `*Search Results for "${query}":*\n\n`) {
+                // No valid results to display
+                await sock.sendMessage(mek.remoteJid, {
+                    text: `❌ No results found for "${query}". Please try a different query.`,
+                });
+                return;
+            }
+
             await sock.sendMessage(mek.remoteJid, { text: resultMessage });
 
             // Set up a reply handler for this specific context
-            // Set up a reply handler for this specific context
-replyHandlers[mek.remoteJid] = {
-    context: resultMessage,
-    handler: async (reply, sock, mek, config) => {
-        const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
+            replyHandlers[mek.remoteJid] = {
+                context: resultMessage,
+                handler: async (reply, sock, mek, config) => {
+                    const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
 
-        // Make sure replyText exists
-        if (!replyText) {
-            await sock.sendMessage(mek.remoteJid, { text: "❌ Invalid reply. Please reply with a valid number." });
-            return;
-        }
+                    if (!replyText) {
+                        await sock.sendMessage(mek.remoteJid, { text: "❌ Invalid reply. Please reply with a valid number." });
+                        return;
+                    }
 
-        const trimmedReply = replyText.trim();
+                    const [reciterIndexStr, surahIndexStr] = replyText.trim().split(".");
+                    const reciterIndex = parseInt(reciterIndexStr, 10) - 1;
+                    const surahIndex = parseInt(surahIndexStr, 10) - 1;
 
-        // Split the reply and check if it's valid
-        const [reciterIndexStr, surahIndexStr] = trimmedReply.split(".").map(num => num.trim());
+                    if (
+                        !isNaN(reciterIndex) &&
+                        !isNaN(surahIndex) &&
+                        reciterIndex >= 0 &&
+                        reciterIndex < reciters.length &&
+                        surahIndex >= 0 &&
+                        surahIndex < Object.entries(reciters[reciterIndex][1]).length
+                    ) {
+                        const [reciterName, surahs] = reciters[reciterIndex];
+                        const [surahName, surahUrl] = Object.entries(surahs)[surahIndex];
 
-        const reciterIndex = parseInt(reciterIndexStr, 10);
-        const surahIndex = parseInt(surahIndexStr, 10);
-
-        // Check if the indices are valid and within bounds
-        if (
-            !isNaN(reciterIndex) &&
-            !isNaN(surahIndex) &&
-            reciterIndex >= 0 &&
-            reciterIndex < reciters.length &&
-            surahIndex >= 0 &&
-            surahIndex < Object.entries(reciters[reciterIndex][1]).length
-        ) {
-            const [reciterName, surahs] = reciters[reciterIndex];
-            const surahEntries = Object.entries(surahs);
-            const [surahName, surahUrl] = surahEntries[surahIndex];
-
-            if (surahName && surahUrl) {
-                await sock.sendMessage(mek.remoteJid, {
-                    audio: { url: surahUrl },
-                    mimetype: "audio/mp4",
-                    caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                });
-            }
-        } else {
-            await sock.sendMessage(mek.remoteJid, {
-                text: "❌ Invalid selection. Please reply with a valid number.",
-            });
-        }
-    },
-};
-
+                        if (surahName && surahUrl) {
+                            await sock.sendMessage(mek.remoteJid, {
+                                document: { url: surahUrl },
+                                mimetype: "audio/mp4",
+                                fileName: surahName + '_By_' + reciterName + '_VEGA_MD.mp3',
+                                caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                            });
+                        }
+                    } else {
+                        await sock.sendMessage(mek.remoteJid, {
+                            text: "❌ Invalid selection. Please reply with a valid number.",
+                        });
+                    }
+                },
+            };
         } catch (error) {
             console.error("Error in Quran command:", error);
             await sock.sendMessage(mek.remoteJid, {
@@ -265,6 +278,56 @@ replyHandlers[mek.remoteJid] = {
         }
     },
 });
+
+//gemini command
+cmd({
+    pattern: "gemini",
+    description: "Send a query to the Gemini plugin and get a response.",
+    type: "misc",
+    execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        const command = args.shift().toLowerCase(); // Extract the command
+        const query = args.join(" ").trim(); // The rest is the query
+
+        // Ensure the query is provided
+        if (!query) {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❗ Please provide a query for Gemini.\nExample: `.gemini hi`",
+            });
+            return;
+        }
+
+        // Build the API URL
+        const apiUrl = `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=gemini&query=${encodeURIComponent(query)}`;
+
+        try {
+            // Fetch the API response
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            // Check if the response is valid
+            if (data.status !== "true" || !data.result || !data.result.response) {
+                await sock.sendMessage(mek.remoteJid, {
+                    text: `❌ No valid response for your query "${query}". Please try again later.`,
+                });
+                return;
+            }
+
+            // Send the result back to the user
+            const replyMessage = `${data.result.response}`;
+            await sock.sendMessage(mek.remoteJid, {
+                text: replyMessage,
+            });
+        } catch (error) {
+            console.error("Error in Gemini command:", error);
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ An error occurred while processing your request. Please try again later.",
+            });
+        }
+    },
+});
+
 
 
 module.exports = commands, { cmd };

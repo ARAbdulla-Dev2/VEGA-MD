@@ -1,6 +1,7 @@
 const fs = require('fs');
 const moment = require('moment');
 const os = require('os');
+const path = require('path');
 
 const mono = '```';
 const light = '`';
@@ -16,6 +17,8 @@ const commands = [];
 function cmd(command) {
     commands.push(command);
 }
+
+
 
 // alive command
 cmd({
@@ -75,58 +78,6 @@ cmd({
     }
 });
 
-cmd({
-    pattern: "menu",
-    description: "Get bot commands menu.",
-    type: "main",
-    isPremium: false,
-    execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
-        const isGroup = mek.remoteJid.endsWith('@g.us');
-        let isSudo;
-        let jid;
-        const currentTime = moment().tz(config.SETTINGS.region).format('HH:mm');
-        const fullCurrentTime = moment().tz(config.SETTINGS.region).format('YYYYMMDDHHmmss');
-        const startMoment = moment(startTime, 'YYYYMMDDHHmmss');
-        const currentMoment = moment(fullCurrentTime, 'YYYYMMDDHHmmss');
-        const duration = moment.duration(currentMoment.diff(startMoment));
-        const uptime = `${Math.floor(duration.asDays()).toString().padStart(2, '0')}D ${duration.hours().toString().padStart(2, '0')}H ${duration.minutes().toString().padStart(2, '0')}M`;
-        const totalMemoryMB = Math.round(os.totalmem() / 1024 / 1024);
-        const usedMemoryMB = totalMemoryMB - Math.round(os.freemem() / 1024 / 1024);
 
-        if (!isGroup) {
-            isSudo = mek.remoteJid === `${config.OWNER.number}@s.whatsapp.net`;
-            jid = mek.remoteJid.replace(/@s\.whatsapp\.net$/, '');
-        } else {
-            isSudo = mek.participant === `${config.OWNER.number}@s.whatsapp.net`;
-            jid = mek.participant.replace(/@s\.whatsapp\.net$/, '');
-        }
-
-        const types = [...new Set(global.commands.map(cmd => cmd.type))];
-        
-    
-        // Create single-select formatted buttons
-        const typeButtons = [{
-            type: 'select',
-            text: 'Select a command category',
-            info: JSON.stringify({
-                title: 'MAIN MENU',
-                sections: [
-                    {
-                        title: 'Please select a category',
-                        highlight_label: 'RAWmd',
-                        rows: types.map(type => ({
-                            title: type.charAt(0).toUpperCase() + type.slice(1) + ' Menu',
-                            id: config.SETTINGS.prefix + type + 'menu'
-                        }))
-                    }
-                ]
-            })
-        }];
-
-        const image = 'fs:./src/media/image/menu.png';
-    
-        await sendButtonMessage(sock, mek.remoteJid, `${light}${config.BOT.name}${light}\n\n${mono}Click below button to see my menu!${mono}\n`, 'RAW-MD v1.0', typeButtons, image);
-    }
-});
 
 module.exports = commands, { cmd };
