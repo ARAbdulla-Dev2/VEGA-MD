@@ -201,7 +201,7 @@ async function VEGAmdSock() {
         });
 
             const formattedUserId = formatUserId(sock.user.id);
-            sock.sendMessage(formattedUserId, { image: fs.readFileSync('./src/media/image/connection.png'), caption: `${light}CONNECTED${light}\n${mono}\n➕VERSION  - ${config.DEVELOPER.version}\n➕PLUGINS  - ${commandCount}\n➕PREFIX   - ${config.SETTINGS.prefix}\n➕DEVELOPER- ${config.DEVELOPER.phone}${mono}\n\n> *VEGA-MD v1.0* ✨` });
+            sock.sendMessage(formattedUserId, { image: fs.readFileSync('./src/media/image/connection.png'), caption: `${light}CONNECTED${light}\n${mono}\n➕VERSION  - ${config.DEVELOPER.version}\n➕PLUGINS  - ${commandCount}\n➕PREFIX   - ${config.SETTINGS.prefix}\n➕DEVELOPER- ${config.DEVELOPER.phone}${mono}\n\n${config.DEVELOPER.footer}` });
             console.log(chalk.green(`      ➕ VERSION   - ${config.DEVELOPER.version}\n      ➕ PLUGINS   - ${commandCount}\n      ➕ PREFIX    - ${config.SETTINGS.prefix}\n      ➕ DEVELOPER - ${config.DEVELOPER.phone}`));
         } else if (connection === 'close' && lastDisconnect.error instanceof Boom && lastDisconnect.error.output?.statusCode === DisconnectReason.loggedOut) {
             console.log(chalk.red('🔺 THE SESSION FILE HAS EXPIRED (E-000).'));

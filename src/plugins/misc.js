@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const fs = require('fs');
 
 global.commands = [];
 
@@ -212,10 +213,10 @@ cmd({
                 return;
             }
 
-            let resultMessage = `*Search Results for "${query}":*\n\n*Reply with the number (e.g., 1.1) to get the surah.*\n\n`;
+            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}" from ARAbdulla-Dev's Quran API*\n\n🔢 *Reply with the number (e.g., 1.1) to get the surah.*\n\n`;
             reciters.forEach(([reciterName, surahs], index) => {
                 Object.entries(surahs).forEach(([surahName, surahUrl], subIndex) => {
-                    resultMessage += `📖 *${index + 1}.${subIndex + 1}* - ${reciterName} - ${surahName}\n`;
+                    resultMessage += `🔺 *${index + 1}.${subIndex + 1}* - ${reciterName} - ${surahName}\n`;
                 });
             });
 
@@ -227,7 +228,7 @@ cmd({
                 return;
             }
 
-            await sock.sendMessage(mek.remoteJid, { text: resultMessage });
+            await sock.sendMessage(mek.remoteJid, { image:fs.readFileSync('./src/media/image/any.png'),caption: resultMessage + `\n\n${config.DEVELOPER.footer}` });
 
             // Set up a reply handler for this specific context
             replyHandlers[mek.remoteJid] = {
