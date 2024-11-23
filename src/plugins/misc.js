@@ -228,7 +228,8 @@ cmd({
                 return;
             }
 
-            await sock.sendMessage(mek.remoteJid, { image:fs.readFileSync('./src/media/image/any.png'),caption: resultMessage + `\n\n${config.DEVELOPER.footer}` });
+            //await sock.sendMessage(mek.remoteJid, { image:fs.readFileSync('./src/media/image/any.png'),caption: resultMessage + `\n\n${config.DEVELOPER.footer}` });
+            await sock.sendMessage(mek.remoteJid, { text: resultMessage });
 
             // Set up a reply handler for this specific context
             replyHandlers[mek.remoteJid] = {
