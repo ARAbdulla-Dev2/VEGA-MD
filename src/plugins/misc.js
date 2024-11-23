@@ -165,41 +165,41 @@ cmd({
 });
 
 
-// Quran Command
 cmd({
     pattern: "quran",
     description: "Search and send Quran Surahs.",
     type: "misc",
-    execute: async (m, sock, mek, config, startTime, sendButtonMessage, replyHandlers) => {
+    execute: async (m, sock, mek, config, startTime, replyHandlers) => {
+        const remoteJid = mek?.remoteJid;
+
+        if (!remoteJid) {
+            console.error("Invalid message event: remoteJid is missing.");
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ An error occurred. Could not identify the chat session.",
+            });
+            return;
+        }
+
         const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
         const args = msgText.trim().split(" ");
-        const command = args.shift().toLowerCase(); // Extract command and normalize to lowercase
-        const query = args.join(" ").trim(); // Join remaining parts as the query
+        args.shift(); // Remove the command itself
+        const query = args.join(" ").trim();
 
-        if (command !== ".quran" || !query) {
-            await sock.sendMessage(mek.remoteJid, {
+        if (!query) {
+            await sock.sendMessage(remoteJid, {
                 text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
             });
             return;
         }
 
-        // Fetch Quran results
         const apiUrl = `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=quran&query=${encodeURIComponent(query)}`;
+
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            // Exit early if `result.message` indicates no surahs were found
-            if (data.result?.message === "No results found for your query.") {
-                await sock.sendMessage(mek.remoteJid, {
-                    text: `❌ No results found for "${query}". Please try a different query.`,
-                });
-                return;
-            }
-
-            // Handle invalid or empty results
-            if (data.status !== "true" || !data.result || Object.keys(data.result).length === 0) {
-                await sock.sendMessage(mek.remoteJid, {
+            if (!data || data.status !== "true" || !data.result) {
+                await sock.sendMessage(remoteJid, {
                     text: `❌ No results found for "${query}". Please try a different query.`,
                 });
                 return;
@@ -207,38 +207,40 @@ cmd({
 
             const reciters = Object.entries(data.result);
             if (reciters.length === 0) {
-                await sock.sendMessage(mek.remoteJid, {
+                await sock.sendMessage(remoteJid, {
                     text: `❌ No results found for "${query}". Please try a different query.`,
                 });
                 return;
             }
 
-            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}" from ARAbdulla-Dev's Quran API*\n\n🔢 *Reply with the number (e.g., 1.1) to get the surah.*\n\n`;
-            reciters.forEach(([reciterName, surahs], index) => {
-                Object.entries(surahs).forEach(([surahName, surahUrl], subIndex) => {
-                    resultMessage += `🔺 *${index + 1}.${subIndex + 1}* - ${reciterName} - ${surahName}\n`;
+            // Build the result message with indexed options
+            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}"*\n\nReply with the number (e.g., 1.1) to get the surah.\n\n`;
+            const options = [];
+            reciters.forEach(([reciterName, surahs], reciterIndex) => {
+                Object.entries(surahs).forEach(([surahName, surahUrl], surahIndex) => {
+                    const option = {
+                        reciterName,
+                        surahName,
+                        surahUrl,
+                    };
+                    options.push(option);
+
+                    resultMessage += `🔺 *${reciterIndex + 1}.${surahIndex + 1}* - ${reciterName} - ${surahName}\n`;
                 });
             });
 
-            if (resultMessage.trim() === `*Search Results for "${query}":*\n\n`) {
-                // No valid results to display
-                await sock.sendMessage(mek.remoteJid, {
-                    text: `❌ No results found for "${query}". Please try a different query.`,
-                });
-                return;
-            }
+            await sock.sendMessage(remoteJid, { text: resultMessage });
 
-            //await sock.sendMessage(mek.remoteJid, { image:fs.readFileSync('./src/media/image/any.png'),caption: resultMessage + `\n\n${config.DEVELOPER.footer}` });
-            await sock.sendMessage(mek.remoteJid, { text: resultMessage });
-
-            // Set up a reply handler for this specific context
-            replyHandlers[mek.remoteJid] = {
-                context: resultMessage,
+            // Set reply handler for Quran selection
+            replyHandlers[remoteJid] = {
+                context: "quran",
                 handler: async (reply, sock, mek, config) => {
                     const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
 
                     if (!replyText) {
-                        await sock.sendMessage(mek.remoteJid, { text: "❌ Invalid reply. Please reply with a valid number." });
+                        await sock.sendMessage(remoteJid, {
+                            text: "❌ Invalid reply. Please reply with a valid number.",
+                        });
                         return;
                     }
 
@@ -246,35 +248,30 @@ cmd({
                     const reciterIndex = parseInt(reciterIndexStr, 10) - 1;
                     const surahIndex = parseInt(surahIndexStr, 10) - 1;
 
-                    if (
-                        !isNaN(reciterIndex) &&
-                        !isNaN(surahIndex) &&
-                        reciterIndex >= 0 &&
-                        reciterIndex < reciters.length &&
-                        surahIndex >= 0 &&
-                        surahIndex < Object.entries(reciters[reciterIndex][1]).length
-                    ) {
-                        const [reciterName, surahs] = reciters[reciterIndex];
-                        const [surahName, surahUrl] = Object.entries(surahs)[surahIndex];
+                    // Map selection to corresponding option
+                    const flatIndex = reciterIndex * 100 + surahIndex;
+                    const selectedOption = options[flatIndex];
 
-                        if (surahName && surahUrl) {
-                            await sock.sendMessage(mek.remoteJid, {
-                                document: { url: surahUrl },
-                                mimetype: "audio/mp4",
-                                fileName: surahName + '_By_' + reciterName + '_VEGA_MD.mp3',
-                                caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                            });
-                        }
-                    } else {
-                        await sock.sendMessage(mek.remoteJid, {
+                    if (!selectedOption) {
+                        await sock.sendMessage(remoteJid, {
                             text: "❌ Invalid selection. Please reply with a valid number.",
                         });
+                        return;
                     }
+
+                    const { reciterName, surahName, surahUrl } = selectedOption;
+
+                    await sock.sendMessage(remoteJid, {
+                        document: { url: surahUrl },
+                        mimetype: "audio/mp4",
+                        fileName: `${surahName}_By_${reciterName}_VEGA_MD.mp3`,
+                        caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
+                    });
                 },
             };
         } catch (error) {
             console.error("Error in Quran command:", error);
-            await sock.sendMessage(mek.remoteJid, {
+            await sock.sendMessage(remoteJid, {
                 text: "❌ An error occurred while processing your request. Please try again later.",
             });
         }

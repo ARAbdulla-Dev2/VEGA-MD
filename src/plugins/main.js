@@ -18,47 +18,65 @@ function cmd(command) {
     commands.push(command);
 }
 
-
-
-// alive command
 cmd({
-    pattern: "alive",
-    description: "Get whether the bot is alive.",
+    pattern: "menu",
+    description: "Display all bot commands categorized by type.",
     type: "main",
-    isPremium: false,
-    execute: (m, sock, mek, config, startTime, sendButtonMessage) => {
-        const isGroup = mek.remoteJid.endsWith('@g.us');
-        let isSudo;
-        let jid;
-        const currentTime = moment().tz(config.SETTINGS.region).format('HH:mm');
-        const fullCurrentTime = moment().tz(config.SETTINGS.region).format('YYYYMMDDHHmmss');
-        const startMoment = moment(startTime, 'YYYYMMDDHHmmss');
-        const currentMoment = moment(fullCurrentTime, 'YYYYMMDDHHmmss');
-        const duration = moment.duration(currentMoment.diff(startMoment));
-        const uptime = `${Math.floor(duration.asDays()).toString().padStart(2, '0')}D ${duration.hours().toString().padStart(2, '0')}H ${duration.minutes().toString().padStart(2, '0')}M`;
-        const totalMemoryMB = Math.round(os.totalmem() / 1024 / 1024);
-        const usedMemoryMB = totalMemoryMB - Math.round(os.freemem() / 1024 / 1024);
+    execute: async (m, sock, mek, config, startTime, replyHandlers) => {
+        const remoteJid = mek?.remoteJid;
 
-        if (!isGroup) {
-            isSudo = mek.remoteJid === `${config.OWNER.number}@s.whatsapp.net`;
-            jid = mek.remoteJid.replace(/@s\.whatsapp\.net$/, '');
-        } else {
-            isSudo = mek.participant === `${config.OWNER.number}@s.whatsapp.net`;
-            jid = mek.participant.replace(/@s\.whatsapp\.net$/, '');
+        if (!remoteJid) {
+            console.error("Invalid message event: remoteJid is missing.");
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ An error occurred. Could not identify the chat session.",
+            });
+            return;
         }
 
-        const bodyMessage = `${light}${config.BOT.name}${light}\n\n🔺 *Time:* ${currentTime}\n🔺 *Region:* ${config.SETTINGS.region}\n🔺 *User:* @${jid}\n🔺 *isSudo:* ${isSudo}\n🔺 *Uptime:* ${uptime}\n🔺 *Memory:* ${usedMemoryMB}/${totalMemoryMB}\n\n${mono}I am still awake, how can I help you?${mono}\n`;
-        const footerMessage = 'RAW-MD v1.0';
-        const buttons = [
-            { type: 'reply', text: 'MENU', id: config.SETTINGS.prefix + 'menu' + '-btn' },
-            { type: 'url', text: 'SCRIPT', url: 'https://github.com' }
-        ];
+        replyHandlers[remoteJid] = replyHandlers[remoteJid] || {};
 
-        const image = 'fs:./src/media/image/alive.png';
+        const types = Object.keys(groupedCommands);
+        let mainMenuMessage = `*MAIN MENU*\n\n`;
 
-        sendButtonMessage(sock, mek.remoteJid, bodyMessage, footerMessage, buttons, image);
-    }
+        // Build the menu with hidden values in the message text
+        types.forEach((type, index) => {
+            mainMenuMessage += `[${index + 1}] ${type.toUpperCase()}\n`;
+        });
+        mainMenuMessage += `\nReply with the number (e.g., 1) to choose a menu type.`;
+
+        await sock.sendMessage(remoteJid, { text: mainMenuMessage });
+
+        // Set reply handler for menu selection
+        replyHandlers[remoteJid].context = "menu";
+        replyHandlers[remoteJid].handler = async (reply, sock, mek, config) => {
+            const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
+            const selectedIndex = parseInt(replyText.trim(), 10) - 1;
+
+            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < types.length) {
+                const selectedType = types[selectedIndex];
+                const commandsOfType = groupedCommands[selectedType];
+
+                if (commandsOfType?.length > 0) {
+                    let submenuMessage = `*${selectedType.toUpperCase()} MENU*\n\n`;
+                    commandsOfType.forEach(cmd => {
+                        submenuMessage += `- ${config.SETTINGS.prefix}${cmd.pattern} - ${cmd.description}\n`;
+                    });
+
+                    await sock.sendMessage(remoteJid, { text: submenuMessage });
+                } else {
+                    await sock.sendMessage(remoteJid, {
+                        text: `❌ No commands found for the selected menu.`,
+                    });
+                }
+            } else {
+                await sock.sendMessage(remoteJid, {
+                    text: "❌ Invalid selection. Please reply with a valid number.",
+                });
+            }
+        };
+    },
 });
+
 
 // owner command
 cmd({
@@ -78,6 +96,33 @@ cmd({
     }
 });
 
+module.exports = commands, {cmd };  // Correct export
 
+let menuCommands = [];
 
-module.exports = commands, { cmd };
+fs.readdirSync('./src/plugins').forEach(file => {
+    if (file.endsWith('.js')) {
+        try {
+            const pluginCommands = require(path.join(__dirname, file));
+
+            if (Array.isArray(pluginCommands)) {
+                menuCommands = menuCommands.concat(pluginCommands);
+            } else {
+                console.warn(`Plugin file ${file} does not export an array of commands.`);
+            }
+        } catch (err) {
+            console.error(`Error loading plugin from ${file}:`, err.message);
+        }
+    }
+});
+
+// Group commands by type
+const groupedCommands = {};
+menuCommands.forEach(cmdm => {
+    if (cmdm.type) {
+        if (!groupedCommands[cmdm.type]) {
+            groupedCommands[cmdm.type] = [];
+        }
+        groupedCommands[cmdm.type].push(cmdm);
+    }
+});

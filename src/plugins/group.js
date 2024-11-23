@@ -74,4 +74,4 @@ cmd({
     }
 });
 
-module.exports = { commands, cmd };
+module.exports = commands, { cmd };

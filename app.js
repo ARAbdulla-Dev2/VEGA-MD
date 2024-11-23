@@ -13,102 +13,6 @@ env.config();
 
 let commands = [];
 
-async function sendButtonMessage(sock, remoteJid, bodyMessage, footerMessage, buttons, image) {
-    const formattedButtons = buttons.map((btn) => {
-        if (btn.type === 'reply') {
-            return {
-                name: "quick_reply",
-                buttonParamsJson: JSON.stringify({
-                    display_text: btn.text,
-                    id: btn.id
-                })
-            };
-        } else if (btn.type === 'url') {
-            return {
-                name: "cta_url",
-                buttonParamsJson: JSON.stringify({
-                    display_text: btn.text,
-                    url: btn.url
-                })
-            };
-        } else if (btn.type === 'select') {
-            return {
-                name: "single_select",
-                buttonParamsJson: btn.info,
-            };
-        } else if (btn.type === 'copy') {
-            return {
-                name: "cta_copy",
-                buttonParamsJson: JSON.stringify({
-                    display_text: btn.text,
-                    id: btn.id,
-                    copy_code: btn.code,
-                })
-            };
-        }
-    });
-
-    let headerOptions = {
-        title: "",
-        gifPlayback: true,
-        subtitle: "",
-        hasMediaAttachment: false,
-    };
-
-    if (image) {
-        const buffer = String(image).startsWith("fs:") 
-            ? fs.readFileSync(String(image).replace(/fs:/gi, '')) 
-            : await getImageBuffer(image);
-        const imageMedia = await prepareWAMessageMedia({ image: buffer }, { upload: sock.waUploadToServer });
-        
-        headerOptions = {
-            title: "",
-            gifPlayback: true,
-            subtitle: "",
-            hasMediaAttachment: true,
-            imageMessage: imageMedia.imageMessage
-        };
-    }
-
-    const msg = generateWAMessageFromContent(remoteJid, {
-        viewOnceMessage: {
-            message: {
-                messageContextInfo: {
-                    deviceListMetadata: {},
-                    deviceListMetadataVersion: 2
-                },
-                interactiveMessage: proto.Message.InteractiveMessage.create({
-                    body: proto.Message.InteractiveMessage.Body.create({
-                        text: bodyMessage
-                    }),
-                    footer: proto.Message.InteractiveMessage.Footer.create({
-                        text: footerMessage
-                    }),
-                    header: proto.Message.InteractiveMessage.Header.create(headerOptions),
-                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        buttons: formattedButtons
-                    }),
-                    contextInfo: {
-                        mentionedJid: [remoteJid],
-                        forwardingScore: 0,
-                        isForwarded: false,
-                    }
-                }),
-            },
-        },
-    }, {});
-
-    await sock.relayMessage(remoteJid, msg.message, {
-        messageId: msg.key.id
-    });
-}
-
-async function getImageBuffer(imageUrl) {
-    const response = await fetch(imageUrl);
-    const buffer = await response.buffer();
-    return buffer;
-}
-
 fs.readdirSync('./src/plugins').forEach(file => {
     if (file.endsWith('.js')) {
         const pluginCommands = require(`./src/plugins/${file}`);
@@ -212,46 +116,55 @@ async function VEGAmdSock() {
 const replyHandlers = {};
 
 sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
-    const mek = VEGAmdMsg.messages[0].key;
+    const mek = VEGAmdMsg.messages[0]?.key;
     const m = VEGAmdMsg.messages[0];
-    let msg;
+    const remoteJid = mek?.remoteJid;
 
-    if (m && m.message && (m.message.extendedTextMessage || m.message.conversation)) {
-        msg = m.message.extendedTextMessage?.text || m.message.conversation || null;
+    // Validate message structure
+    if (!remoteJid) {
+        console.error("Invalid message event: remoteJid is missing.");
+        return;
     }
 
-    // Check for command
+    let msg = null;
+    if (m?.message && (m.message.extendedTextMessage || m.message.conversation)) {
+        msg = m.message.extendedTextMessage?.text || m.message.conversation;
+    }
+
+    // Check if it's a command
     if (msg && msg.startsWith(config.SETTINGS.prefix)) {
         const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(' ')[0].toLowerCase();
         const command = commands.find(cmd => cmd.pattern === commandName);
+
         if (command) {
-            await command.execute(m, sock, mek, config, startTime, sendButtonMessage, replyHandlers);
+            try {
+                await command.execute(m, sock, mek, config, startTime, replyHandlers);
+            } catch (error) {
+                console.error("Error in command execution:", error);
+                await sock.sendMessage(remoteJid, { text: "❌ An error occurred while processing your command." });
+            }
         }
         return;
     }
 
     // Handle replies for ongoing interactions
-    if (
-        m?.message?.extendedTextMessage?.contextInfo?.quotedMessage &&
-        m.message.extendedTextMessage.contextInfo.quotedMessage.conversation
-    ) {
-        const quotedText = m.message.extendedTextMessage.contextInfo.quotedMessage.conversation;
-        const replyHandler = replyHandlers[mek.remoteJid];
+    const quotedMessage = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation;
+    if (quotedMessage && replyHandlers[remoteJid]) {
+        const replyHandler = replyHandlers[remoteJid];
 
-        if (replyHandler && replyHandler.context === quotedText) {
-            // Pass the reply to the relevant plugin
+        // Dynamically handle the context of the reply
+        if (replyHandler?.context && replyHandler.handler) {
             try {
                 await replyHandler.handler(m, sock, mek, config);
             } catch (error) {
                 console.error("Error in reply handler:", error);
-                sock.sendMessage(mek.remoteJid, {
+                await sock.sendMessage(remoteJid, {
                     text: "❌ An error occurred while processing your reply.",
                 });
             }
         }
     }
 });
-
     
     sock.ev.on('creds.update', saveCreds);
 }

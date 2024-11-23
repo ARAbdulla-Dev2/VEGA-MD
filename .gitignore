@@ -2,3 +2,5 @@ VEGAmdSession/*
 !VEGAmdSession/creds.json
 
 node_modules
+
+old*
