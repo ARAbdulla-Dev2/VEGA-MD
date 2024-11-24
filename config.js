@@ -11,7 +11,7 @@ env.config();
 let DEVELOPER = {
     version: 'v1.0',
     phone: '94715733954',
-    footer: '> *VEGA-MD* ✨'
+    footer: '> ➕ *VEGA-MD v1.0*'
 }
 
 let OWNER = {    

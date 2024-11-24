@@ -27,24 +27,26 @@ cmd({
         const remoteJid = mek?.remoteJid;
 
         const types = Object.keys(groupedCommands);
-        let mainMenuMessage = `*MAIN MENU*\n\n`;
+        let mainMenuMessage = `💠 *VEGA-MD-MENU* 💠\n\n🔢 Reply with the number (e.g., 1) to choose a menu type.\n\n`;
 
         types.forEach((type, index) => {
-            mainMenuMessage += `[${index + 1}] ${type.toUpperCase()}\n`;
+            mainMenuMessage += `> *${index + 1} ${type.toUpperCase()} MENU*\n`;
         });
-        mainMenuMessage += `\nReply with the number (e.g., 1) to choose a menu type.`;
 
-        const msg = await sock.sendMessage(remoteJid, { text: mainMenuMessage });
+        mainMenuMessage += '\n'+config.DEVELOPER.footer;
+
+        const msg = await sock.sendMessage(remoteJid, { image: fs.readFileSync('./src/media/image/any.png') , caption: mainMenuMessage });
         const msgId = msg.key.id
 
         // Save menu options for reply handling
         replyHandlers[msgId] = {
             key: { remoteJid },
             data: types.reduce((acc, type, index) => {
-                const menuMessage = `*${type.toUpperCase()} MENU*\n\n${groupedCommands[type].map(cmd => `.${cmd.pattern}`).join('\n')}`;
+                const menuMessage = `*${type.toUpperCase()} MENU*\n\n${groupedCommands[type].map(cmd => `${config.SETTINGS.prefix}${cmd.pattern}`).join('\n')}`;
                 acc[(index + 1).toString()] = {
-                    msg: menuMessage,
-                    type: 'text',  // Ensuring type is 'text' for text-based responses
+                    image: fs.readFileSync('./src/media/image/any.png'),
+                    caption: menuMessage + '\n\n'+ config.DEVELOPER.footer,
+                    type: 'image',
                 };
                 return acc;
             }, {}),

@@ -23,37 +23,18 @@ cmd({
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
         try {
-            // Send initial "Pinging..." message
             const response = await sock.sendMessage(mek.remoteJid, { text: "*Pinging...*" });
-
-            // Start the ping process and calculate latency
-            const start = Date.now();
-            
-            // Update the message with progress bars
-            await sock.sendMessage(mek.remoteJid, { text: "*[□□□□□]*", edit: response.key });
-            await delay(500); // Add delay for better user experience
-            await sock.sendMessage(mek.remoteJid, { text: "*[■□□□□]*", edit: response.key });
-            await delay(500);
-            await sock.sendMessage(mek.remoteJid, { text: "*[■■■□□]*", edit: response.key });
-            await delay(500);
-            await sock.sendMessage(mek.remoteJid, { text: "*[■■■■□]*", edit: response.key });
-            await delay(500);
-            await sock.sendMessage(mek.remoteJid, { text: "*[■■■■■]*", edit: response.key });
-            
-            // Calculate and send latency
-            const latency = Date.now() - start;
+            const start = performance.now();
+            await sock.sendMessage(mek.remoteJid, { react: { text: "🚀", key: mek }});
+            const latency = (performance.now() - start).toFixed(2);
             await sock.sendMessage(mek.remoteJid, { text: `*${latency}ms*`, edit: response.key });
         } catch (error) {
-            console.error("Error in ping command:", error);
-            await sock.sendMessage(mek.remoteJid, { text: "*❌ Error occurred. Please try again later.*" });
+            console.error("🔺 ERROR IN PING COMMAND:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "❌ *ERROR*" });
         }
     },
 });
 
-// Helper function to delay the execution
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // forward command
 cmd({
@@ -179,9 +160,9 @@ cmd({
         const remoteJid = mek?.remoteJid;
 
         if (!remoteJid) {
-            console.error("Invalid message event: remoteJid is missing.");
+            console.error("🔺 INVALID MESSAGE EVENT: remoteJid is missing.");
             await sock.sendMessage(remoteJid, {
-                text: "❌ An error occurred. Could not identify the chat session.",
+                text: "❌ *ERROR*",
             });
             return;
         }
@@ -220,17 +201,17 @@ cmd({
             }
 
             // Build a list of options
-            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}"*\n\nReply with the number (e.g., 1.1) to get the Surah.\n\n`;
+            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\nSearch Results for "${query}"\n\n🔢 Reply with the number (e.g., 1.1) to get the Surah.\n\n`;
             const options = {};
             reciters.forEach(([reciterName, surahs], reciterIndex) => {
                 Object.entries(surahs).forEach(([surahName, surahUrl], surahIndex) => {
                     const optionKey = `${reciterIndex + 1}.${surahIndex + 1}`;
                     options[optionKey] = { reciterName, surahName, surahUrl };
-                    resultMessage += `🔺 *${optionKey}* - ${reciterName} - ${surahName}\n`;
+                    resultMessage += `➕ *${optionKey}* - ${reciterName} - ${surahName}\n`;
                 });
             });
 
-            const msg = await sock.sendMessage(remoteJid, { text: resultMessage });
+            const msg = await sock.sendMessage(remoteJid, { image: fs.readFileSync('./src/media/image/any.png') , caption: resultMessage + `\n${config.DEVELOPER.footer}` });
             const msgId = msg.key.id;
 
             // Save reply handler for Quran selection
