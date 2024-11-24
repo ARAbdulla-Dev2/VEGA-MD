@@ -7,6 +7,9 @@ const path = require('path');
 const env = require('dotenv');
 const moment = require('moment-timezone');
 const os = require('os');
+const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("./utils/replyHandlerUtil");
+
+clearReplyHandlers();
 
 const config = require('./config');
 env.config();
@@ -112,60 +115,87 @@ async function VEGAmdSock() {
         }
     });
 
-// Global object to track pending reply interactions
-const replyHandlers = {};
 
-sock.ev.on('messages.upsert', async (VEGAmdMsg) => {
+
+// Load the reply handlers into memory
+let replyHandlers = loadReplyHandlers();
+
+sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
     const mek = VEGAmdMsg.messages[0]?.key;
     const m = VEGAmdMsg.messages[0];
     const remoteJid = mek?.remoteJid;
 
-    // Validate message structure
     if (!remoteJid) {
         console.error("Invalid message event: remoteJid is missing.");
         return;
     }
 
-    let msg = null;
-    if (m?.message && (m.message.extendedTextMessage || m.message.conversation)) {
-        msg = m.message.extendedTextMessage?.text || m.message.conversation;
-    }
+    const msgId = mek.id;
+    const msg = m?.message?.conversation || m?.message?.extendedTextMessage?.text;
+    const quotedMsg = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+    const quotedMsgId = m?.message?.extendedTextMessage?.contextInfo?.stanzaId;
 
-    // Check if it's a command
-    if (msg && msg.startsWith(config.SETTINGS.prefix)) {
-        const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(' ')[0].toLowerCase();
-        const command = commands.find(cmd => cmd.pattern === commandName);
+    // Check if the message is a reply to a stored handler
+    if (quotedMsgId && replyHandlers[quotedMsgId]) {
+        const handler = replyHandlers[quotedMsgId];
+        const replyText = msg?.trim();
 
-        if (command) {
-            try {
-                await command.execute(m, sock, mek, config, startTime, replyHandlers);
-            } catch (error) {
-                console.error("Error in command execution:", error);
-                await sock.sendMessage(remoteJid, { text: "❌ An error occurred while processing your command." });
+        // Validate the replyText (the user's selection, which should be a number)
+        if (replyText && handler.data[replyText]) {
+            const nextReply = handler.data[replyText];
+
+            // Handle different types of replies: text, document, audio, image
+            if (nextReply.type === 'text') {
+                await sock.sendMessage(remoteJid, { text: nextReply.msg });
+            } else if (nextReply.type === 'document') {
+                await sock.sendMessage(remoteJid, {
+                    document: { url: nextReply.document.url },
+                    mimetype: nextReply.document.mimetype,
+                    fileName: nextReply.document.fileName,
+                    caption: nextReply.caption || ''
+                });
+            } else if (nextReply.type === 'audio') {
+                await sock.sendMessage(remoteJid, {
+                    audio: { url: nextReply.audio.url },
+                    mimetype: 'audio/mp4',
+                    caption: nextReply.caption || ''
+                });
+            } else if (nextReply.type === 'image') {
+                await sock.sendMessage(remoteJid, {
+                    image: { url: nextReply.image.url },
+                    caption: nextReply.caption || ''
+                });
             }
+
+            // Don't delete the handler after sending the reply
+            // (this is where the deletion of the handler was previously)
+            // delete replyHandlers[quotedMsgId];
+            // saveReplyHandlers(replyHandlers);
+        } else {
+            // If the reply is invalid
+            await sock.sendMessage(remoteJid, { text: "❌ Invalid selection. Please use a valid option." });
         }
         return;
     }
 
-    // Handle replies for ongoing interactions
-    const quotedMessage = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation;
-    if (quotedMessage && replyHandlers[remoteJid]) {
-        const replyHandler = replyHandlers[remoteJid];
+    // Command handling for other commands
+    if (msg && msg.startsWith(config.SETTINGS.prefix)) {
+        const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(" ")[0].toLowerCase();
+        const command = commands.find((cmd) => cmd.pattern === commandName);
 
-        // Dynamically handle the context of the reply
-        if (replyHandler?.context && replyHandler.handler) {
+        if (command) {
             try {
-                await replyHandler.handler(m, sock, mek, config);
+                await command.execute(m, sock, mek, config, Date.now(), replyHandlers);
             } catch (error) {
-                console.error("Error in reply handler:", error);
+                console.error("Error in command execution:", error);
                 await sock.sendMessage(remoteJid, {
-                    text: "❌ An error occurred while processing your reply.",
+                    text: "❌ An error occurred while processing your command.",
                 });
             }
         }
     }
 });
-    
+
     sock.ev.on('creds.update', saveCreds);
 }
 

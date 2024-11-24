@@ -1,0 +1,40 @@
+{
+  "3EB07F16AA58CBF1BB39BC": {
+    "key": {
+      "remoteJid": "94704281955@s.whatsapp.net"
+    },
+    "data": {
+      "1": {
+        "msg": "*GROUP MENU*\n\n.mute\n.unmute",
+        "type": "text"
+      },
+      "2": {
+        "msg": "*MAIN MENU*\n\n.menu\n.cls\n.owner",
+        "type": "text"
+      },
+      "3": {
+        "msg": "*MISC MENU*\n\n.ping\n.forward\n.wid\n.quran\n.gemini",
+        "type": "text"
+      }
+    }
+  },
+  "3EB038A29880517D31B396": {
+    "key": {
+      "remoteJid": "94704281955@s.whatsapp.net"
+    },
+    "data": {
+      "1": {
+        "msg": "*GROUP MENU*\n\n.mute\n.unmute",
+        "type": "text"
+      },
+      "2": {
+        "msg": "*MAIN MENU*\n\n.menu\n.cls\n.owner",
+        "type": "text"
+      },
+      "3": {
+        "msg": "*MISC MENU*\n\n.ping\n.forward\n.wid\n.quran\n.gemini",
+        "type": "text"
+      }
+    }
+  }
+}

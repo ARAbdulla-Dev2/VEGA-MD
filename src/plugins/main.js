@@ -2,6 +2,7 @@ const fs = require('fs');
 const moment = require('moment');
 const os = require('os');
 const path = require('path');
+const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
 
 const mono = '```';
 const light = '`';
@@ -25,57 +26,74 @@ cmd({
     execute: async (m, sock, mek, config, startTime, replyHandlers) => {
         const remoteJid = mek?.remoteJid;
 
-        if (!remoteJid) {
-            console.error("Invalid message event: remoteJid is missing.");
-            await sock.sendMessage(mek.remoteJid, {
-                text: "❌ An error occurred. Could not identify the chat session.",
-            });
-            return;
-        }
-
-        replyHandlers[remoteJid] = replyHandlers[remoteJid] || {};
-
         const types = Object.keys(groupedCommands);
         let mainMenuMessage = `*MAIN MENU*\n\n`;
 
-        // Build the menu with hidden values in the message text
         types.forEach((type, index) => {
             mainMenuMessage += `[${index + 1}] ${type.toUpperCase()}\n`;
         });
         mainMenuMessage += `\nReply with the number (e.g., 1) to choose a menu type.`;
 
-        await sock.sendMessage(remoteJid, { text: mainMenuMessage });
+        const msg = await sock.sendMessage(remoteJid, { text: mainMenuMessage });
+        const msgId = msg.key.id
 
-        // Set reply handler for menu selection
-        replyHandlers[remoteJid].context = "menu";
-        replyHandlers[remoteJid].handler = async (reply, sock, mek, config) => {
-            const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
-            const selectedIndex = parseInt(replyText.trim(), 10) - 1;
-
-            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < types.length) {
-                const selectedType = types[selectedIndex];
-                const commandsOfType = groupedCommands[selectedType];
-
-                if (commandsOfType?.length > 0) {
-                    let submenuMessage = `*${selectedType.toUpperCase()} MENU*\n\n`;
-                    commandsOfType.forEach(cmd => {
-                        submenuMessage += `- ${config.SETTINGS.prefix}${cmd.pattern} - ${cmd.description}\n`;
-                    });
-
-                    await sock.sendMessage(remoteJid, { text: submenuMessage });
-                } else {
-                    await sock.sendMessage(remoteJid, {
-                        text: `❌ No commands found for the selected menu.`,
-                    });
-                }
-            } else {
-                await sock.sendMessage(remoteJid, {
-                    text: "❌ Invalid selection. Please reply with a valid number.",
-                });
-            }
+        // Save menu options for reply handling
+        replyHandlers[msgId] = {
+            key: { remoteJid },
+            data: types.reduce((acc, type, index) => {
+                const menuMessage = `*${type.toUpperCase()} MENU*\n\n${groupedCommands[type].map(cmd => `.${cmd.pattern}`).join('\n')}`;
+                acc[(index + 1).toString()] = {
+                    msg: menuMessage,
+                    type: 'text',  // Ensuring type is 'text' for text-based responses
+                };
+                return acc;
+            }, {}),
         };
+
+        saveReplyHandlers(replyHandlers); // Save the updated reply handlers to file
     },
 });
+
+cmd({
+    pattern: "cls",
+    description: "Clear cached reply handlers.",
+    type: "main",
+    isPremium: false,
+    execute: async (m, sock, mek, config) => {
+        const botNumber = formatUserId(sock.user.id);
+            const participant = mek.participant || mek.remoteJid;
+            const isOwner = participant === config.OWNER.number + "@s.whatsapp.net" || participant === botNumber;
+
+        // Ensure the message is sent by the bot or the owner
+        if ( !isOwner) {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ You do not have permission to use this command.",
+            });
+            return;
+        }
+
+        try {
+            // Clear reply handlers
+            clearReplyHandlers();
+
+            // Notify success
+            await sock.sendMessage(mek.remoteJid, {
+                text: "✅ Successfully cleared all reply handlers.",
+            });
+        } catch (error) {
+            console.error("Error clearing reply handlers:", error);
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ An error occurred while clearing reply handlers.",
+            });
+        }
+    },
+});
+
+// Utility function to normalize bot's ID
+function formatUserId(userId) {
+    return userId.replace(/:\d+@s\.whatsapp\.net$/, "@s.whatsapp.net");
+}
+
 
 
 // owner command

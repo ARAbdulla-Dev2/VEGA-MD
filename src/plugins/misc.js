@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
+const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
 
 global.commands = [];
 
@@ -145,6 +147,8 @@ function formatUserId(userId) {
 
 
 
+
+
 // Wid command
 cmd({
     pattern: "wid",
@@ -165,6 +169,8 @@ cmd({
 });
 
 
+
+
 cmd({
     pattern: "quran",
     description: "Search and send Quran Surahs.",
@@ -174,7 +180,7 @@ cmd({
 
         if (!remoteJid) {
             console.error("Invalid message event: remoteJid is missing.");
-            await sock.sendMessage(mek.remoteJid, {
+            await sock.sendMessage(remoteJid, {
                 text: "❌ An error occurred. Could not identify the chat session.",
             });
             return;
@@ -187,7 +193,7 @@ cmd({
 
         if (!query) {
             await sock.sendMessage(remoteJid, {
-                text: "❗ Please provide a surah name to search.\nExample: `.quran Fatiha`",
+                text: "❗ Please provide a Surah name to search.\nExample: `.quran Fatiha`",
             });
             return;
         }
@@ -213,62 +219,38 @@ cmd({
                 return;
             }
 
-            // Build the result message with indexed options
-            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}"*\n\nReply with the number (e.g., 1.1) to get the surah.\n\n`;
-            const options = [];
+            // Build a list of options
+            let resultMessage = `📖 *VEGA-MD-QURAN* 📖\n\n*Search Results for "${query}"*\n\nReply with the number (e.g., 1.1) to get the Surah.\n\n`;
+            const options = {};
             reciters.forEach(([reciterName, surahs], reciterIndex) => {
                 Object.entries(surahs).forEach(([surahName, surahUrl], surahIndex) => {
-                    const option = {
-                        reciterName,
-                        surahName,
-                        surahUrl,
-                    };
-                    options.push(option);
-
-                    resultMessage += `🔺 *${reciterIndex + 1}.${surahIndex + 1}* - ${reciterName} - ${surahName}\n`;
+                    const optionKey = `${reciterIndex + 1}.${surahIndex + 1}`;
+                    options[optionKey] = { reciterName, surahName, surahUrl };
+                    resultMessage += `🔺 *${optionKey}* - ${reciterName} - ${surahName}\n`;
                 });
             });
 
-            await sock.sendMessage(remoteJid, { text: resultMessage });
+            const msg = await sock.sendMessage(remoteJid, { text: resultMessage });
+            const msgId = msg.key.id;
 
-            // Set reply handler for Quran selection
-            replyHandlers[remoteJid] = {
-                context: "quran",
-                handler: async (reply, sock, mek, config) => {
-                    const replyText = reply.message.conversation || reply.message.extendedTextMessage?.text;
-
-                    if (!replyText) {
-                        await sock.sendMessage(remoteJid, {
-                            text: "❌ Invalid reply. Please reply with a valid number.",
-                        });
-                        return;
-                    }
-
-                    const [reciterIndexStr, surahIndexStr] = replyText.trim().split(".");
-                    const reciterIndex = parseInt(reciterIndexStr, 10) - 1;
-                    const surahIndex = parseInt(surahIndexStr, 10) - 1;
-
-                    // Map selection to corresponding option
-                    const flatIndex = reciterIndex * 100 + surahIndex;
-                    const selectedOption = options[flatIndex];
-
-                    if (!selectedOption) {
-                        await sock.sendMessage(remoteJid, {
-                            text: "❌ Invalid selection. Please reply with a valid number.",
-                        });
-                        return;
-                    }
-
-                    const { reciterName, surahName, surahUrl } = selectedOption;
-
-                    await sock.sendMessage(remoteJid, {
-                        document: { url: surahUrl },
-                        mimetype: "audio/mp4",
-                        fileName: `${surahName}_By_${reciterName}_VEGA_MD.mp3`,
+            // Save reply handler for Quran selection
+            replyHandlers[msgId] = {
+                key: { remoteJid },
+                data: Object.entries(options).reduce((acc, [key, { reciterName, surahName, surahUrl }]) => {
+                    acc[key] = {
+                        type: "document",
+                        document: {
+                            url: surahUrl,
+                            mimetype: "audio/mp4",
+                            fileName: `${surahName}_By_${reciterName}_VEGA_MD.mp3`,
+                        },
                         caption: `📖 *Surah:* ${surahName}\n🎙️ *Reciter:* ${reciterName}`,
-                    });
-                },
+                    };
+                    return acc;
+                }, {}),
             };
+
+            saveReplyHandlers(replyHandlers); // Save reply handlers to storage
         } catch (error) {
             console.error("Error in Quran command:", error);
             await sock.sendMessage(remoteJid, {
