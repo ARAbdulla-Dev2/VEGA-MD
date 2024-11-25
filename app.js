@@ -143,6 +143,11 @@ async function VEGAmdSock() {
     .filter(word => word.length > 0);
 	let replyHandlers = loadReplyHandlers();
 
+	// Load allowed groups from badword.json
+const badwordConfig = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'data/badword.json'), 'utf-8')
+);
+
 	sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
 		const mek = VEGAmdMsg.messages[0]?.key;
 		const m = VEGAmdMsg.messages[0];
@@ -210,27 +215,37 @@ async function VEGAmdSock() {
 		}
 	
 		// Bad words filtering
-		if (config.SETTINGS.antibadwords && isGroup && msg) {
-			const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
-	
-			if (containsBadWords) {
-				try {
-					// Fetch group metadata to check admin status
-					const groupMetadata = await sock.groupMetadata(remoteJid);
-					const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-					const isBotAdmin = groupMetadata.participants.some(
-						p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
-					);
-	
-					if (isBotAdmin) {
-						// Delete the bad word message
-						await sock.sendMessage(remoteJid, { delete: mek });
-					}
-				} catch {
-					await sock.sendMessage(remoteJid, {text: 'error'});
-				}
-			}
-		}
+if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {
+    const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
+
+    if (containsBadWords) {
+        try {
+            // Fetch group metadata to check admin status
+            const groupMetadata = await sock.groupMetadata(remoteJid);
+            const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+            const isBotAdmin = groupMetadata.participants.some(
+                p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
+            );
+
+            if (isBotAdmin) {
+                // Remove the bad word message
+                await sock.sendMessage(remoteJid, { delete: mek });
+
+                // Get the sender ID and format for mention
+                const badUserId = mek.participant.replace('@s.whatsapp.net', '');
+
+                // Send warning message
+                await sock.sendMessage(remoteJid, {
+                    text: `⚠️ *HEY* @${badUserId}, *PLEASE AVOID USING BAD WORDS IN THIS GROUP.*`,
+                    mentions: [mek.participant],
+                });
+            }
+        } catch (error) {
+            await sock.sendMessage(remoteJid, { text: '❌ *ERROR IN BAD WORD HANDLER*' });
+        }
+    }
+}
+
 
 		// Handle commands
 		if (msg && msg.startsWith(config.SETTINGS.prefix)) {
