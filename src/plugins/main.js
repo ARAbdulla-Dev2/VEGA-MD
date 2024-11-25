@@ -1,7 +1,7 @@
 const fs = require('fs');
-const moment = require('moment');
 const os = require('os');
 const path = require('path');
+const moment = require('moment-timezone');
 const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
 
 const mono = '```';
@@ -18,6 +18,72 @@ const commands = [];
 function cmd(command) {
     commands.push(command);
 }
+
+cmd({
+    pattern: "alive",
+    description: "Check if the bot is online and view status details.",
+    type: "main",
+    execute: async (m, sock, mek, config, startTime, replyHandlers) => {
+        const remoteJid = mek?.remoteJid;
+
+        // Owner validation
+        const isOwner = config.OWNER.number === sock.user.id;
+        const sudoStatus = isOwner ? "true" : "false";
+
+        // Calculate uptime
+        const uptime = process.uptime();
+        const uptimeString = new Date(uptime * 1000).toISOString().substr(11, 8); // Format: HH:mm:ss
+
+        // Current time with timezone
+        const region = config.SETTINGS.region || "UTC";
+        const currentTime = moment().tz(region).format("HH:mm:ss");
+
+        // Alive message
+        const aliveMessage = 
+`*( ● ᐯEGᗩ-ᗰᗪ ● )*
+
+🔹 *| USER:* \`\`\`@${remoteJid}\`\`\`
+🔹 *| VERSION:* \`\`\`${config.DEVELOPER.version || "v1.0"}\`\`\`
+🔹 *| UPTIME:* \`\`\`${uptimeString}\`\`\`
+🔹 *| PLUGINS:* \`\`\`12\`\`\`
+🔹 *| TIME:* \`\`\`${currentTime}\`\`\`
+🔹 *| SUDO:* \`\`\`${sudoStatus}\`\`\`
+
+*Hey There, I am alive now!*
+*How can I help you today?*
+
+> *[1] MENU* 📁
+> *[2] PING* 🚀
+
+> ⭐ *Script: github.com/User/Repo*
+
+> *ᐯEGᗩ-ᗰᗪ ᐯ1.0* ➕`;
+
+        // Send alive message
+        const msg = await sock.sendMessage(remoteJid, {
+            image: fs.readFileSync('./src/media/image/alive.png'),
+            caption: aliveMessage,
+        });
+        const msgId = msg.key.id;
+
+        // Save reply options for menu handling
+        replyHandlers[msgId] = {
+            key: { remoteJid },
+            data: {
+                "1": {
+                    text: "📁 *MENU*\n\nExplore all bot commands categorized by type.",
+                    type: "text",
+                },
+                "2": {
+                    text: "🚀 *PING*\n\nCalculating response time...",
+                    type: "text",
+                },
+            },
+        };
+
+        saveReplyHandlers(replyHandlers); // Save reply handlers
+    },
+});
 
 cmd({
     pattern: "menu",

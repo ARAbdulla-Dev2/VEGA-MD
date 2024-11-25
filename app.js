@@ -136,71 +136,107 @@ async function VEGAmdSock() {
 		}
 	});
 
+	const badWords = fs
+    .readFileSync(path.join(__dirname, 'data/badwords.txt'), 'utf-8')
+    .split(/\s+/) // Split on any whitespace
+    .map(word => word.trim())
+    .filter(word => word.length > 0);
 	let replyHandlers = loadReplyHandlers();
 
 	sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
 		const mek = VEGAmdMsg.messages[0]?.key;
 		const m = VEGAmdMsg.messages[0];
 		const remoteJid = mek?.remoteJid;
-
+	
 		if (!remoteJid) {
 			console.log(chalk.red("🔺 INVALID MESSAGE EVENT: remoteJid is missing"));
 			return;
 		}
-
+	
 		const msgId = mek.id;
+		const isGroup = remoteJid.endsWith('@g.us');
 		const msg = m?.message?.conversation || m?.message?.extendedTextMessage?.text;
 		const quotedMsg = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 		const quotedMsgId = m?.message?.extendedTextMessage?.contextInfo?.stanzaId;
-
+	
+		// Handle reply handlers
 		if (quotedMsgId && replyHandlers[quotedMsgId]) {
 			const handler = replyHandlers[quotedMsgId];
 			const replyText = msg?.trim();
-
+	
 			if (replyText && handler.data[replyText]) {
 				const nextReply = handler.data[replyText];
-
-				if (nextReply.type === 'text') {
+	
+				try {
+					if (nextReply.type === 'text') {
+						await sock.sendMessage(remoteJid, {
+							text: nextReply.msg,
+						});
+					} else if (nextReply.type === 'document') {
+						await sock.sendMessage(remoteJid, {
+							document: {
+								url: nextReply.document.url,
+							},
+							mimetype: nextReply.document.mimetype,
+							fileName: nextReply.document.fileName,
+							caption: nextReply.caption || '',
+						});
+					} else if (nextReply.type === 'audio') {
+						await sock.sendMessage(remoteJid, {
+							audio: {
+								url: nextReply.audio.url,
+							},
+							mimetype: 'audio/mp4',
+							caption: nextReply.caption || '',
+						});
+					} else if (nextReply.type === 'image') {
+						await sock.sendMessage(remoteJid, {
+							image: nextReply.image,
+							caption: nextReply.caption || '',
+						});
+					}
+				} catch (error) {
+					console.log(chalk.red("🔺 ERROR IN REPLY HANDLER EXECUTION:"), error);
 					await sock.sendMessage(remoteJid, {
-						text: nextReply.msg
-					});
-				} else if (nextReply.type === 'document') {
-					await sock.sendMessage(remoteJid, {
-						document: {
-							url: nextReply.document.url
-						},
-						mimetype: nextReply.document.mimetype,
-						fileName: nextReply.document.fileName,
-						caption: nextReply.caption || ''
-					});
-				} else if (nextReply.type === 'audio') {
-					await sock.sendMessage(remoteJid, {
-						audio: {
-							url: nextReply.audio.url
-						},
-						mimetype: 'audio/mp4',
-						caption: nextReply.caption || ''
-					});
-				} else if (nextReply.type === 'image') {
-					await sock.sendMessage(remoteJid, {
-						image: nextReply.image,
-						caption: nextReply.caption || ''
+						text: "❌ *ERROR IN REPLY HANDLER*",
 					});
 				}
-
 			} else {
-
 				await sock.sendMessage(remoteJid, {
-					text: "❌ *INVALID SELECTION*"
+					text: "❌ *INVALID SELECTION*",
 				});
 			}
 			return;
 		}
+	
+		// Bad words filtering
+		if (config.SETTINGS.antibadwords && isGroup && msg) {
+			const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
+	
+			if (containsBadWords) {
+				try {
+					// Fetch group metadata to check admin status
+					const groupMetadata = await sock.groupMetadata(remoteJid);
+					const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+					const isBotAdmin = groupMetadata.participants.some(
+						p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
+					);
+	
+					if (isBotAdmin) {
+						// Delete the bad word message
+						await sock.sendMessage(remoteJid, { delete: mek });
+					}
+				} catch {
+					await sock.sendMessage(remoteJid, {text: 'error'});
+				}
+			}
+		}
 
+		// Handle commands
 		if (msg && msg.startsWith(config.SETTINGS.prefix)) {
 			const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(" ")[0].toLowerCase();
 			const command = commands.find((cmd) => cmd.pattern === commandName);
-
+	
 			if (command) {
 				try {
 					await command.execute(m, sock, mek, config, Date.now(), replyHandlers);
@@ -213,6 +249,7 @@ async function VEGAmdSock() {
 			}
 		}
 	});
+	
 
 	sock.ev.on('creds.update', saveCreds);
 }

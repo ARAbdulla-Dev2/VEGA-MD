@@ -1,1 +1,1494 @@
-{}
+{
+  "3EB0C7269F2A8C2B28F131": {
+    "key": {
+      "remoteJid": "120363326817286724@g.us"
+    },
+    "data": {
+      "1.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/kamel/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdallah Kamel_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdallah Kamel"
+      },
+      "2.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800608.us.archive.org/31/items/alfirdwsiy1433_gmail_46799767979696767967469644696496799201706/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdel Rahman Benmoussa_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdel Rahman Benmoussa"
+      },
+      "3.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601009.us.archive.org/4/items/114-sora-abd-alhameed-ahsayn--quran-warsh-64kb/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdelhamid Ehsain_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdelhamid Ehsain"
+      },
+      "4.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801906.us.archive.org/27/items/A_B_K/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdelmoujib Benkirane_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdelmoujib Benkirane"
+      },
+      "5.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801506.us.archive.org/3/items/Abdualhaleem-Hussain/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdualhaleem Hussain_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdualhaleem Hussain"
+      },
+      "6.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/basit/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Basit_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Basit"
+      },
+      "7.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Basit mojawwad_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Basit mojawwad"
+      },
+      "8.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Basit warsh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Basit warsh"
+      },
+      "9.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/kanakeri/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Hadi Kanakri_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Hadi Kanakri"
+      },
+      "10.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/mohsin_harthi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Mohsen Al Harthy_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Mohsen Al Harthy"
+      },
+      "11.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/qasm/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Mohsen Al-Qasim_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Mohsen Al-Qasim"
+      },
+      "12.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/a_majed/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Rahman Al Majid_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Rahman Al Majid"
+      },
+      "13.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/aloosi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Rahman Al-Awsi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Rahman Al-Awsi"
+      },
+      "14.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia803202.us.archive.org/10/items/aljrrayddi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Rahman Al-Juraidhi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Rahman Al-Juraidhi"
+      },
+      "15.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/sds/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Rahman Al-Sudais_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Rahman Al-Sudais"
+      },
+      "16.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/soufi/Rewayat-Khalaf-A-n-Hamzah/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdul Rashid Sufi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdul Rashid Sufi"
+      },
+      "17.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/a_ahmed/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_AbdulAziz Al-Ahmad_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* AbdulAziz Al-Ahmad"
+      },
+      "18.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/zahrani/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdulaziz Al-Zahrani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdulaziz Al-Zahrani"
+      },
+      "19.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/thubti/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_AbdulBari Thubaiti_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* AbdulBari Thubaiti"
+      },
+      "20.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801007.us.archive.org/15/items/mp3quran34/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_AbdulKabeer Al-Hadidi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* AbdulKabeer Al-Hadidi"
+      },
+      "21.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903409.us.archive.org/26/items/s20sssssssssssssssssssssssss210418/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Al-Juhani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Al-Juhani"
+      },
+      "22.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800400.us.archive.org/27/items/alfirdwsiy1433_gmail_002_2679777666666666666666666666666666696794696901706/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Al-Khalaf_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Al-Khalaf"
+      },
+      "23.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia804709.us.archive.org/9/items/rsalafs-Quran-alkhaleefy/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Al-Khulaifi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Al-Khulaifi"
+      },
+      "24.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/mtrod/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Al-Matrod_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Al-Matrod"
+      },
+      "25.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600206.us.archive.org/0/items/002_20240329/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Al-Mousa_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Al-Mousa"
+      },
+      "26.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/bsfr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Basfar_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Basfar"
+      },
+      "27.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/kyat/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abdullah Khayat_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abdullah Khayat"
+      },
+      "28.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/wdod/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_AbdulWadud Hanif_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* AbdulWadud Hanif"
+      },
+      "29.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601308.us.archive.org/16/items/www.elahmad.com_46/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_AbdurRazzaq al-Dulaimi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* AbdurRazzaq al-Dulaimi"
+      },
+      "30.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/shatri/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Abu Bakr Al-Shatry_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Abu Bakr Al-Shatry"
+      },
+      "31.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/a_klb/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Adel Al Kalbani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Adel Al Kalbani"
+      },
+      "32.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/ryan/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Adel Ryan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Adel Ryan"
+      },
+      "33.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/Aamer/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_ahmad aamer_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* ahmad aamer"
+      },
+      "34.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/nufais/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmad Alnufais_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmad Alnufais"
+      },
+      "35.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/ahmad_nu/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmad Nauina_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmad Nauina"
+      },
+      "36.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/ajm/128/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Al-Ajmi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Al-Ajmi"
+      },
+      "37.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601708.us.archive.org/6/items/128---kb---mp3----quran---full---by---ahmad-allahdan/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Al-Lahdan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Al-Lahdan"
+      },
+      "38.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia803000.us.archive.org/20/items/Z02_20190528/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Diban_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Diban"
+      },
+      "39.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Issa Al-Masrawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Issa Al-Masrawi"
+      },
+      "40.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Khalil Shaheen_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Khalil Shaheen"
+      },
+      "41.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800305.us.archive.org/15/items/853685368356853683568356853683568/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Mohammed Taher_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Mohammed Taher"
+      },
+      "42.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903103.us.archive.org/19/items/xxxxxxxxxxxxxxxxxxxxxxxxxxx2_20191118_201911/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmed Nasr_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmed Nasr"
+      },
+      "43.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/trabulsi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ahmet Khader Trabelsi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ahmet Khader Trabelsi"
+      },
+      "44.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/akrm/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_akram alaqimi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* akram alaqimi"
+      },
+      "45.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/qeniwa/Rewayat-Qalon-A-n-Nafi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Amin Quniwa_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Amin Quniwa"
+      },
+      "46.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/koshi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Ayoun Al-Kushi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Ayoun Al-Kushi"
+      },
+      "47.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/dokali/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Dukali Muhammad Al-Alim_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Dukali Muhammad Al-Alim"
+      },
+      "48.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800902.us.archive.org/22/items/Al-Husaree_Almoalim/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Hosary with Children_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Hosary with Children"
+      },
+      "49.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801305.us.archive.org/10/items/qalooon-app-alhusari/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Husary Qalon_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Husary Qalon"
+      },
+      "50.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/husr_warsh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Husary warsh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Husary warsh"
+      },
+      "51.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server13.mp3quran.net/husr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Hussary Mahmoud Khalil_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Hussary Mahmoud Khalil"
+      },
+      "52.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Hussary Mujawwad_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Hussary Mujawwad"
+      },
+      "53.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Minshawi tajweed_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Minshawi tajweed"
+      },
+      "54.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/alzain/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Al-Zein Muhammad Ahmad_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Al-Zein Muhammad Ahmad"
+      },
+      "55.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/fateh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Alfateh Alzubair_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Alfateh Alzubair"
+      },
+      "56.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/huthifi_qalon/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ali Al-Hudhaifi Qalon_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ali Al-Hudhaifi Qalon"
+      },
+      "57.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/hthfi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ali Alhuthaifi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ali Alhuthaifi"
+      },
+      "58.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/a_jbr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ali Jaber_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ali Jaber"
+      },
+      "59.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801201.us.archive.org/30/items/way2sona_20151219_2128/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Alshahat Anwar_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Alshahat Anwar"
+      },
+      "60.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801206.us.archive.org/31/items/Way2sona_20151221_1450/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Amer Al-Kazemi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Amer Al-Kazemi"
+      },
+      "61.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/a_alemadi/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Anas alemadi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Anas alemadi"
+      },
+      "62.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800707.us.archive.org/1/items/alfirdwsiy1433_22_201812/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Anas Almiman_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Anas Almiman"
+      },
+      "63.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600801.us.archive.org/11/items/128kb-anas--galhoom-----mp3--full--mushaf--quran--114--sora--/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Anas Jalhoum_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Anas Jalhoum"
+      },
+      "64.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903003.us.archive.org/1/items/alfirdwsiy1433_gmail_0tttttttttttttttttttttttttttt/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ayman Sweid_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ayman Sweid"
+      },
+      "65.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/bader/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_badr alturki_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* badr alturki"
+      },
+      "66.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/balilah/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Bandar Balila_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Bandar Balila"
+      },
+      "67.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia904709.us.archive.org/15/items/56kb--dawood---7amza-----mp3--full--mushaf--quran--114--sora---/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Daoud Hamza_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Daoud Hamza"
+      },
+      "68.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia804708.us.archive.org/29/items/fahad-almutairi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Fahad Almutairi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Fahad Almutairi"
+      },
+      "69.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/frs_a/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Fares Abbad_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Fares Abbad"
+      },
+      "70.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600205.us.archive.org/19/items/rabieaaa2015_yahoo_002132432/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Fatih Cholak_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Fatih Cholak"
+      },
+      "71.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/f_khamery/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Foad AlKhamere_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Foad AlKhamere"
+      },
+      "72.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903403.us.archive.org/22/items/alfirdwsiy143NBVCXCRETYUTIUYIYITYTRE02_201712/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ghassan Al-Shorbagy_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ghassan Al-Shorbagy"
+      },
+      "73.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801908.us.archive.org/1/items/hadi-turi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hadi Toure_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hadi Toure"
+      },
+      "74.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601508.us.archive.org/27/items/alfirdw65888888888888888888856865563568356gmail_002/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hajjaj Al Hindawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hajjaj Al Hindawi"
+      },
+      "75.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801208.us.archive.org/8/items/34734734732473247457/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hamza Algerian_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hamza Algerian"
+      },
+      "76.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801408.us.archive.org/6/items/002_20221105_202211/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hamza El Far_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hamza El Far"
+      },
+      "77.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/hani/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hani Al-Rifai_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hani Al-Rifai"
+      },
+      "78.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia902800.us.archive.org/18/items/24--kb--hasan--alwagdy--mp3--full--mushaf--quran--114--sora-/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hassan Al-Wajdi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hassan Al-Wajdi"
+      },
+      "79.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903208.us.archive.org/21/items/hassan_mohaed_saleh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hassan Saleh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hassan Saleh"
+      },
+      "80.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600204.us.archive.org/6/items/Al-Quran_tilawat_Hassan_Mohammed_Saleh_Warsh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hassan Saleh Warsh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hassan Saleh Warsh"
+      },
+      "81.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/hatem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hatem Farid Al-Waer_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hatem Farid Al-Waer"
+      },
+      "82.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/H-Lharraz/Rewayat-Warsh-A-n-Nafi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Hisham Al-Haraz_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Hisham Al-Haraz"
+      },
+      "83.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601209.us.archive.org/17/items/Al-Quran_tilawat_Al-Hussayni_Al-Azazy/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Husseini Azazi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Husseini Azazi"
+      },
+      "84.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/akdr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ibrahim Al-Akhdar_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ibrahim Al-Akhdar"
+      },
+      "85.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/3siri/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ibrahim Asiri_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ibrahim Asiri"
+      },
+      "86.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/abkr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Idris Abkar_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Idris Abkar"
+      },
+      "87.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia904508.us.archive.org/5/items/kquran.com__Elhan-Tok/kquran.com_001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Ilhan Tok_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Ilhan Tok"
+      },
+      "88.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801909.us.archive.org/35/items/3imad/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Imad Al-Mansri_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Imad Al-Mansri"
+      },
+      "89.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903106.us.archive.org/19/items/alfirdwsiy2018_gmtttttqqttttttt/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Imams of alharam Mosque_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Imams of alharam Mosque"
+      },
+      "90.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801309.us.archive.org/15/items/ishak_danish/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_ishak danish_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* ishak danish"
+      },
+      "91.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia802901.us.archive.org/28/items/002yyy20y0425yyyyyyyyyyyyyyyyyyyyyyyyy/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Jazza Alswaileh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Jazza Alswaileh"
+      },
+      "92.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia802906.us.archive.org/5/items/kareem-mansoory-mogawwad-128kb-114-sorah-high-quality/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Karim Mansouri_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Karim Mansouri"
+      },
+      "93.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/kafi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Khaled Abdel Kafi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Khaled Abdel Kafi"
+      },
+      "94.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/jleel/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Khaled Al Jalil_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Khaled Al Jalil"
+      },
+      "95.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/mohna/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Khaled Al-Muhanna_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Khaled Al-Muhanna"
+      },
+      "96.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/qht/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Khaled Al-Qahtani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Khaled Al-Qahtani"
+      },
+      "97.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/tnjy/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Khalifa Al Tunaiji_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Khalifa Al Tunaiji"
+      },
+      "98.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia802905.us.archive.org/1/items/0ryy02_20200331_2020qeryeryeryeqry03/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_khalil alsaghir_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* khalil alsaghir"
+      },
+      "99.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/maher/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Maher Al-Muaiqly_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Maher Al-Muaiqly"
+      },
+      "100.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia803403.us.archive.org/10/items/002_202fffffffffffffffffff10418fffff/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Maher Alwan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Maher Alwan"
+      },
+      "101.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/shaksh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Maher Shakhashero_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Maher Shakhashero"
+      },
+      "102.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800703.us.archive.org/35/items/Mahmood_Abdul_Hakam-Up-By-MusleM/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mahmoud AbdelHakam_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mahmoud AbdelHakam"
+      },
+      "103.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/bna/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mahmoud El-Banna_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mahmoud El-Banna"
+      },
+      "104.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/zaml/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Majid Alzamil_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Majid Alzamil"
+      },
+      "105.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server14.mp3quran.net/mansor/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mansour Al Salimi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mansour Al Salimi"
+      },
+      "106.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600107.us.archive.org/21/items/alfirdnbv54446i67656534323543544563432433_gmail_019_201801/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Maytham Al-Tammar_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Maytham Al-Tammar"
+      },
+      "107.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801200.us.archive.org/23/items/quran-minshawi-child-repeat/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Minshawi with kids_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Minshawi with kids"
+      },
+      "108.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/afs/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mishary Rashid Alafasy_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mishary Rashid Alafasy"
+      },
+      "109.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/m_krm/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mohamad Abdullkarem_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mohamad Abdullkarem"
+      },
+      "110.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/ayyub/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mohammad Ayyub_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mohammad Ayyub"
+      },
+      "111.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mohammed Al-Ghazali_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mohammed Al-Ghazali"
+      },
+      "112.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800305.us.archive.org/12/items/Mohamed-Hassan-Quran/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mohammed Hassan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mohammed Hassan"
+      },
+      "113.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/ra3ad/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mostafa Al-Azzawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mostafa Al-Azzawi"
+      },
+      "114.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903108.us.archive.org/20/items/golmami2005_yahoo_002_20180413/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muftah Al-Sultani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muftah Al-Sultani"
+      },
+      "115.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801301.us.archive.org/12/items/002_20231230/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al Faqih_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al Faqih"
+      },
+      "116.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server14.mp3quran.net/bukheet/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al-Bakhit_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al-Bakhit"
+      },
+      "117.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601305.us.archive.org/29/items/mohamed-elhodairi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al-Hudayri_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al-Hudayri"
+      },
+      "118.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601004.us.archive.org/10/items/Elkantaoui002/Elkantaoui001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al-Kantawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al-Kantawi"
+      },
+      "119.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/lhdan/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al-Luhaidan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al-Luhaidan"
+      },
+      "120.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600806.us.archive.org/17/items/alfirdwsiy1433_gmail_002_reterytewreweqrryuutyrererew/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Al-Sabil_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Al-Sabil"
+      },
+      "121.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/jbrl/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Jibril_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Jibril"
+      },
+      "122.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia802306.us.archive.org/33/items/golmami2005_yahoo_002_20180406/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Rashad Al-Sharif_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Rashad Al-Sharif"
+      },
+      "123.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server10.mp3quran.net/minsh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Siddiq Al-Minshawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Siddiq Al-Minshawi"
+      },
+      "124.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/tblawi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammad Tablawi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammad Tablawi"
+      },
+      "125.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/mhsny/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammed Al Muhaisni_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammed Al Muhaisni"
+      },
+      "126.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801600.us.archive.org/14/items/mohammad-hosyn-3amer-quran-96kb-114-sorah/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammed Husayn Amer_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammed Husayn Amer"
+      },
+      "127.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Muhammed Said_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Muhammed Said"
+      },
+      "128.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia802900.us.archive.org/1/items/zzzzzzzzzzz002_20zzzzzx20z0407z/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mustafa Gharbi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mustafa Gharbi"
+      },
+      "129.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/mustafa/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mustafa Ismael_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mustafa Ismael"
+      },
+      "130.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801002.us.archive.org/14/items/golmami2005_yahoo_002_20180409_1406/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mustafa Ismail Tajweed_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mustafa Ismail Tajweed"
+      },
+      "131.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/lahoni/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Mustafa Lahouni_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Mustafa Lahouni"
+      },
+      "132.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/nabil/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Nabil Al-Rifai_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Nabil Al-Rifai"
+      },
+      "133.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/qtm/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Nasser Al Qatami_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Nasser Al Qatami"
+      },
+      "134.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/namh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Nima Al-Hassan_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Nima Al-Hassan"
+      },
+      "135.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/nourin_siddig/Rewayat-Aldori-A-n-Abi-Amr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Noreen Siddiq_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Noreen Siddiq"
+      },
+      "136.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800103.us.archive.org/17/items/Obaida-muafaq/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Obaida Muafaq_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Obaida Muafaq"
+      },
+      "137.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/omar_warsh/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Omar Al-Qazbari_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Omar Al-Qazbari"
+      },
+      "138.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server16.mp3quran.net/peshawa/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Pishwa Qadir Al-Kurdi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Pishwa Qadir Al-Kurdi"
+      },
+      "139.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800404.us.archive.org/7/items/alfirdwsiy1433_gmaMMMMMMMMMMM35687468M2_201711/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Rachid Belachia_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Rachid Belachia"
+      },
+      "140.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903200.us.archive.org/19/items/422424247247247247247247yolyo2014_yahoo24_002/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Rachid Belalia_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Rachid Belalia"
+      },
+      "141.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/s_gmd/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Saad Al-Ghamdi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Saad Al-Ghamdi"
+      },
+      "142.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800503.us.archive.org/16/items/Sadaqat-Ali-kz/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Sadaqat Ali_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Sadaqat Ali"
+      },
+      "143.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800401.us.archive.org/35/items/Said-Akhateeb/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Saeed Al-Khatib_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Saeed Al-Khatib"
+      },
+      "144.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia800306.us.archive.org/3/items/kquran.com__Sahl-Yassin/kquran.com_001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Sahl Yassin_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Sahl Yassin"
+      },
+      "145.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/salah_hashim_m/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salah Al-Hashem_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salah Al-Hashem"
+      },
+      "146.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia601502.us.archive.org/8/items/Salah_al-Jamal/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salah Al-Jamal_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salah Al-Jamal"
+      },
+      "147.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/s_bud/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salah Albudair_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salah Albudair"
+      },
+      "148.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia903400.us.archive.org/29/items/002_20210aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa418a/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salah Baothman_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salah Baothman"
+      },
+      "149.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/bu_khtr/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salah Bu Khater_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salah Bu Khater"
+      },
+      "150.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/sahood/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Saleh Al-Sahood_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Saleh Al-Sahood"
+      },
+      "151.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia600309.us.archive.org/7/items/Al-Quran_Dory_tilawat_Salih_Ahmed_Salih/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Salih Ahmed Salih_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Salih Ahmed Salih"
+      },
+      "152.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server7.mp3quran.net/shur/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Saud Al-Shuraim_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Saud Al-Shuraim"
+      },
+      "153.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/taher/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Shirazad Taher_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Shirazad Taher"
+      },
+      "154.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia801504.us.archive.org/35/items/jam3_58/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Sudais & Shuraim_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Sudais & Shuraim"
+      },
+      "155.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia804505.us.archive.org/32/items/Tamim-Al-Rimi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Tamim Al-Rimi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Tamim Al-Rimi"
+      },
+      "156.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/twfeeq/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Tawfeeq As-Sayegh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Tawfeeq As-Sayegh"
+      },
+      "157.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server6.mp3quran.net/wdee3/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Wadie Alyamni_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Wadie Alyamni"
+      },
+      "158.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/yahya/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Yahya Hawwa_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Yahya Hawwa"
+      },
+      "159.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server11.mp3quran.net/yasser/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Yasser Al-Dosari_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Yasser Al-Dosari"
+      },
+      "160.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/qurashi/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Yasser Al-Qurashi_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Yasser Al-Qurashi"
+      },
+      "161.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server12.mp3quran.net/salamah/Rewayat-Hafs-A-n-Assem/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Yasser Salama_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Yasser Salama"
+      },
+      "162.1": {
+        "type": "document",
+        "document": {
+          "url": "https://ia902802.us.archive.org/28/items/www.elahmad.com_69/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Yassin Al-Jazaery_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Yassin Al-Jazaery"
+      },
+      "163.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/yousef/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Youssef Ashewaie_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Youssef Ashewaie"
+      },
+      "164.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server8.mp3quran.net/noah/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_yusuf nooh_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* yusuf nooh"
+      },
+      "165.1": {
+        "type": "document",
+        "document": {
+          "url": "https://server9.mp3quran.net/zaki/001.mp3",
+          "mimetype": "audio/mp4",
+          "fileName": "Fatiha_By_Zaki Daghestani_VEGA_MD.mp3"
+        },
+        "caption": "📖 *Surah:* Fatiha\n🎙️ *Reciter:* Zaki Daghestani"
+      }
+    }
+  }
+}
