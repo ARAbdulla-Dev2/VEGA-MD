@@ -15,6 +15,7 @@ function cmd(command) {
     commands.push(command);
 }
 
+// download command
 cmd({
     pattern: "download",
     description: "Download a file from the given URL and send it. Optionally, provide a custom filename using --fileName.",
@@ -24,9 +25,12 @@ cmd({
         const args = msgText.trim().split(" ");
         args.shift(); // Remove the command itself
 
-        const url = args.join(" ").trim(); // The remaining part is the URL
-        const fileNameArg = args.find(arg => arg.startsWith("--fileName=")); // Check if the user provided --fileName
-        let fileName = fileNameArg ? fileNameArg.split("=")[1] : url.split("/").pop() || "file"; // Set the filename, either from the URL or the user input
+        // Find the index of --fileName if it exists and extract it
+        const fileNameArgIndex = args.findIndex(arg => arg.startsWith("--fileName="));
+        const fileName = fileNameArgIndex !== -1 ? args.splice(fileNameArgIndex, 1)[0].split("=")[1] : null;
+
+        // The remaining part after --fileName should be the URL
+        const url = args.join(" ").trim();
 
         if (!url) {
             await sock.sendMessage(mek.remoteJid, {
@@ -35,6 +39,9 @@ cmd({
             return;
         }
 
+        // If no filename was provided, use the default filename derived from the URL
+        const finalFileName = fileName || url.split("/").pop() || "file";
+
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
@@ -42,7 +49,7 @@ cmd({
             const buffer = await response.buffer();
             await sock.sendMessage(mek.remoteJid, {
                 document: buffer,
-                fileName,
+                fileName: finalFileName,
                 mimetype: response.headers.get("content-type") || "application/octet-stream",
             });
         } catch (error) {
@@ -53,6 +60,7 @@ cmd({
         }
     },
 });
+
 
 
 cmd({
