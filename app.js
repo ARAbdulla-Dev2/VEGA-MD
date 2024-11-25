@@ -241,7 +241,7 @@ if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.inclu
                 });
             }
         } catch (error) {
-            await sock.sendMessage(remoteJid, { text: '❌ *ERROR IN BAD WORD HANDLER*' });
+            await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
         }
     }
 }
