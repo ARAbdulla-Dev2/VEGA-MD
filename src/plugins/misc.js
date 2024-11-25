@@ -15,56 +15,76 @@ function cmd(command) {
     commands.push(command);
 }
 
-// Download command
 cmd({
     pattern: "download",
     description: "Download a file from the given URL and send it.",
     type: "download",
-    isPremium: false,
-    execute: async (m, sock, mek, config) => {
-        try {
-            const url = m.body.split(" ")[1]; // Extract URL from the command
-            if (!url) return await sock.sendMessage(mek.remoteJid, { text: "❌ Please provide a valid URL." });
+    execute: async (m, sock, mek) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        args.shift(); // Remove the command itself
+        const url = args.join(" ").trim(); // The remaining part is the URL
 
+        if (!url) {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❗ Please provide a valid URL to download.\nExample: `.download https://example.com/file.mp4`",
+            });
+            return;
+        }
+
+        try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
-            
+
             const buffer = await response.buffer();
             const fileName = url.split("/").pop() || "file";
-            
+
             await sock.sendMessage(mek.remoteJid, {
                 document: buffer,
                 fileName,
                 mimetype: response.headers.get("content-type") || "application/octet-stream",
             });
         } catch (error) {
-            console.error("🔺 ERROR IN DOWNLOAD COMMAND:", error);
-            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to download the file." });
+            console.error("Error in Download command:", error);
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ Failed to download the file. Please check the URL and try again.",
+            });
         }
     },
 });
 
-// Fetch command
 cmd({
     pattern: "fetch",
     description: "Fetch data from the given API URL and display the result.",
     type: "extra",
-    isPremium: false,
-    execute: async (m, sock, mek, config) => {
-        try {
-            const url = m.body.split(" ")[1]; // Extract URL from the command
-            if (!url) return await sock.sendMessage(mek.remoteJid, { text: "❌ Please provide a valid API URL." });
+    execute: async (m, sock, mek) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        args.shift(); // Remove the command itself
+        const url = args.join(" ").trim(); // The remaining part is the URL
 
+        if (!url) {
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❗ Please provide a valid API URL to fetch data.\nExample: `.fetch https://api.example.com/data`",
+            });
+            return;
+        }
+
+        try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
-            
-            const data = await response.json(); // Assuming the API returns JSON
+
+            const data = await response.json(); // Assuming JSON response
             const formattedData = JSON.stringify(data, null, 2); // Pretty-print JSON
-            
-            await sock.sendMessage(mek.remoteJid, { text: `✅ *Fetched Data:*\n\`\`\`${formattedData}\`\`\`` });
+
+            await sock.sendMessage(mek.remoteJid, {
+                text: `✅ *Fetched Data:*\n\n\`\`\`${formattedData}\`\`\``,
+            });
         } catch (error) {
-            console.error("🔺 ERROR IN FETCH COMMAND:", error);
-            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to fetch data from the API." });
+            console.error("Error in Fetch command:", error);
+            await sock.sendMessage(mek.remoteJid, {
+                text: "❌ Failed to fetch data. Please check the URL and try again.",
+            });
         }
     },
 });
