@@ -17,13 +17,16 @@ function cmd(command) {
 
 cmd({
     pattern: "download",
-    description: "Download a file from the given URL and send it.",
+    description: "Download a file from the given URL and send it. Optionally, provide a custom filename using --fileName.",
     type: "download",
     execute: async (m, sock, mek) => {
         const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
         const args = msgText.trim().split(" ");
         args.shift(); // Remove the command itself
+
         const url = args.join(" ").trim(); // The remaining part is the URL
+        const fileNameArg = args.find(arg => arg.startsWith("--fileName=")); // Check if the user provided --fileName
+        let fileName = fileNameArg ? fileNameArg.split("=")[1] : url.split("/").pop() || "file"; // Set the filename, either from the URL or the user input
 
         if (!url) {
             await sock.sendMessage(mek.remoteJid, {
@@ -37,8 +40,6 @@ cmd({
             if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
 
             const buffer = await response.buffer();
-            const fileName = url.split("/").pop() || "file";
-
             await sock.sendMessage(mek.remoteJid, {
                 document: buffer,
                 fileName,
@@ -52,6 +53,7 @@ cmd({
         }
     },
 });
+
 
 cmd({
     pattern: "fetch",
