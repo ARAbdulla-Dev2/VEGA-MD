@@ -15,6 +15,61 @@ function cmd(command) {
     commands.push(command);
 }
 
+// Download command
+cmd({
+    pattern: "download",
+    description: "Download a file from the given URL and send it.",
+    type: "download",
+    isPremium: false,
+    execute: async (m, sock, mek, config) => {
+        try {
+            const url = m.body.split(" ")[1]; // Extract URL from the command
+            if (!url) return await sock.sendMessage(mek.remoteJid, { text: "❌ Please provide a valid URL." });
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
+            
+            const buffer = await response.buffer();
+            const fileName = url.split("/").pop() || "file";
+            
+            await sock.sendMessage(mek.remoteJid, {
+                document: buffer,
+                fileName,
+                mimetype: response.headers.get("content-type") || "application/octet-stream",
+            });
+        } catch (error) {
+            console.error("🔺 ERROR IN DOWNLOAD COMMAND:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to download the file." });
+        }
+    },
+});
+
+// Fetch command
+cmd({
+    pattern: "fetch",
+    description: "Fetch data from the given API URL and display the result.",
+    type: "extra",
+    isPremium: false,
+    execute: async (m, sock, mek, config) => {
+        try {
+            const url = m.body.split(" ")[1]; // Extract URL from the command
+            if (!url) return await sock.sendMessage(mek.remoteJid, { text: "❌ Please provide a valid API URL." });
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
+            
+            const data = await response.json(); // Assuming the API returns JSON
+            const formattedData = JSON.stringify(data, null, 2); // Pretty-print JSON
+            
+            await sock.sendMessage(mek.remoteJid, { text: `✅ *Fetched Data:*\n\`\`\`${formattedData}\`\`\`` });
+        } catch (error) {
+            console.error("🔺 ERROR IN FETCH COMMAND:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to fetch data from the API." });
+        }
+    },
+});
+
+
 // Ping command
 cmd({
     pattern: "ping",
@@ -40,7 +95,7 @@ cmd({
 cmd({
     pattern: "forward",
     description: "Forward messages.",
-    type: "misc",
+    type: "owner",
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
         try {
@@ -155,7 +210,7 @@ cmd({
 cmd({
     pattern: "quran",
     description: "Search and send Quran Surahs.",
-    type: "misc",
+    type: "search",
     execute: async (m, sock, mek, config, startTime, replyHandlers) => {
         const remoteJid = mek?.remoteJid;
 
@@ -245,7 +300,7 @@ cmd({
 cmd({
     pattern: "gemini",
     description: "Send a query to the Gemini plugin and get a response.",
-    type: "misc",
+    type: "extra",
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
         const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
         const args = msgText.trim().split(" ");

@@ -59,7 +59,7 @@ cmd({
 cmd({
     pattern: "cls",
     description: "Clear cached reply handlers.",
-    type: "main",
+    type: "owner",
     isPremium: false,
     execute: async (m, sock, mek, config) => {
         const botNumber = formatUserId(sock.user.id);
