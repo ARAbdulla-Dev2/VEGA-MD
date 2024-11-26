@@ -59,11 +59,12 @@ cmd({
 
 > *ᐯEGᗩ-ᗰᗪ ᐯ1.0* ➕`;
 
-        // Send alive message
+        // Send alive message with image
         const msg = await sock.sendMessage(remoteJid, {
             image: fs.readFileSync('./src/media/image/alive.png'),
             caption: aliveMessage,
         });
+
         const msgId = msg.key.id;
 
         // Save reply options for menu handling
@@ -71,17 +72,17 @@ cmd({
             key: { remoteJid },
             data: {
                 "1": {
-                    text: "📁 *MENU*\n\nExplore all bot commands categorized by type.",
-                    type: "text",
+                    command: "menu", // Executes the 'menu' command
+                    type: "command",
                 },
                 "2": {
-                    text: "🚀 *PING*\n\nCalculating response time...",
-                    type: "text",
+                    command: "ping", // Executes the 'ping' command
+                    type: "command",
                 },
             },
         };
 
-        saveReplyHandlers(replyHandlers); // Save reply handlers
+        saveReplyHandlers(replyHandlers); // Save reply handlers for persistence
     },
 });
 

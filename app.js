@@ -148,123 +148,131 @@ const badwordConfig = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'data/badword.json'), 'utf-8')
 );
 
-	sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
-		const mek = VEGAmdMsg.messages[0]?.key;
-		const m = VEGAmdMsg.messages[0];
-		const remoteJid = mek?.remoteJid;
-	
-		if (!remoteJid) {
-			console.log(chalk.red("🔺 INVALID MESSAGE EVENT: remoteJid is missing"));
-			return;
-		}
-	
-		const msgId = mek.id;
-		const isGroup = remoteJid.endsWith('@g.us');
-		const msg = m?.message?.conversation || m?.message?.extendedTextMessage?.text;
-		const quotedMsg = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-		const quotedMsgId = m?.message?.extendedTextMessage?.contextInfo?.stanzaId;
-	
-		// Handle reply handlers
-		if (quotedMsgId && replyHandlers[quotedMsgId]) {
-			const handler = replyHandlers[quotedMsgId];
-			const replyText = msg?.trim();
-	
-			if (replyText && handler.data[replyText]) {
-				const nextReply = handler.data[replyText];
-	
-				try {
-					if (nextReply.type === 'text') {
-						await sock.sendMessage(remoteJid, {
-							text: nextReply.msg,
-						});
-					} else if (nextReply.type === 'document') {
-						await sock.sendMessage(remoteJid, {
-							document: {
-								url: nextReply.document.url,
-							},
-							mimetype: nextReply.document.mimetype,
-							fileName: nextReply.document.fileName,
-							caption: nextReply.caption || '',
-						});
-					} else if (nextReply.type === 'audio') {
-						await sock.sendMessage(remoteJid, {
-							audio: {
-								url: nextReply.audio.url,
-							},
-							mimetype: 'audio/mp4',
-							caption: nextReply.caption || '',
-						});
-					} else if (nextReply.type === 'image') {
-						await sock.sendMessage(remoteJid, {
-							image: nextReply.image,
-							caption: nextReply.caption || '',
-						});
+	// Listen to incoming messages
+sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
+    const mek = VEGAmdMsg.messages[0]?.key;
+    const m = VEGAmdMsg.messages[0];
+    const remoteJid = mek?.remoteJid;
+
+    if (!remoteJid) {
+        console.log(chalk.red("🔺 INVALID MESSAGE EVENT: remoteJid is missing"));
+        return;
+    }
+
+    const msgId = mek.id;
+    const isGroup = remoteJid.endsWith('@g.us');
+    const msg = m?.message?.conversation || m?.message?.extendedTextMessage?.text;
+    const quotedMsg = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+    const quotedMsgId = m?.message?.extendedTextMessage?.contextInfo?.stanzaId;
+
+    // Handle reply handlers
+    if (quotedMsgId && replyHandlers[quotedMsgId]) {
+        const handler = replyHandlers[quotedMsgId];
+        const replyText = msg?.trim();
+
+        if (replyText && handler.data[replyText]) {
+            const nextReply = handler.data[replyText];
+
+            try {
+                if (nextReply.type === 'text') {
+                    await sock.sendMessage(remoteJid, {
+                        text: nextReply.msg,
+                    });
+                } else if (nextReply.type === 'document') {
+                    await sock.sendMessage(remoteJid, {
+                        document: {
+                            url: nextReply.document.url,
+                        },
+                        mimetype: nextReply.document.mimetype,
+                        fileName: nextReply.document.fileName,
+                        caption: nextReply.caption || '',
+                    });
+                } else if (nextReply.type === 'audio') {
+                    await sock.sendMessage(remoteJid, {
+                        audio: {
+                            url: nextReply.audio.url,
+                        },
+                        mimetype: 'audio/mp4',
+                        caption: nextReply.caption || '',
+                    });
+                } else if (nextReply.type === 'image') {
+                    await sock.sendMessage(remoteJid, {
+                        image: nextReply.image,
+                        caption: nextReply.caption || '',
+                    });
+                } else if (nextReply.type === 'command') {
+					const commandName = nextReply.command.toLowerCase();
+					const command = commands.find((cmd) => cmd.pattern === commandName);
+					if (command) {
+						await command.execute(m, sock, mek, config, Date.now(), replyHandlers);
+					} else {
+						await sock.sendMessage(remoteJid, { text: `❌ *Unknown command:* ${nextReply.command}` });
 					}
-				} catch (error) {
-					console.log(chalk.red("🔺 ERROR IN REPLY HANDLER EXECUTION:"), error);
-					await sock.sendMessage(remoteJid, {
-						text: "❌ *ERROR IN REPLY HANDLER*",
-					});
-				}
-			} else {
-				await sock.sendMessage(remoteJid, {
-					text: "❌ *INVALID SELECTION*",
-				});
-			}
-			return;
-		}
-	
-		// Bad words filtering
-if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {
-    const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
-
-    if (containsBadWords) {
-        try {
-            // Fetch group metadata to check admin status
-            const groupMetadata = await sock.groupMetadata(remoteJid);
-            const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-            const isBotAdmin = groupMetadata.participants.some(
-                p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
-            );
-
-            if (isBotAdmin) {
-                // Remove the bad word message
-                await sock.sendMessage(remoteJid, { delete: mek });
-
-                // Get the sender ID and format for mention
-                const badUserId = mek.participant.replace('@s.whatsapp.net', '');
-
-                // Send warning message
+				}	
+            } catch (error) {
+                console.log(chalk.red("🔺 ERROR IN REPLY HANDLER EXECUTION:"), error);
                 await sock.sendMessage(remoteJid, {
-                    text: `⚠️ *HEY* @${badUserId}, *PLEASE AVOID USING BAD WORDS IN THIS GROUP.*`,
-                    mentions: [mek.participant],
+                    text: "❌ *ERROR IN REPLY HANDLER*",
                 });
             }
-        } catch (error) {
-            await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
+        } else {
+            await sock.sendMessage(remoteJid, {
+                text: "❌ *INVALID SELECTION*",
+            });
+        }
+        return;
+    }
+
+    // Bad words filtering
+    if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {
+        const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
+
+        if (containsBadWords) {
+            try {
+                // Fetch group metadata to check admin status
+                const groupMetadata = await sock.groupMetadata(remoteJid);
+                const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+                const isBotAdmin = groupMetadata.participants.some(
+                    p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
+                );
+
+                if (isBotAdmin) {
+                    // Remove the bad word message
+                    await sock.sendMessage(remoteJid, { delete: mek });
+
+                    // Get the sender ID and format for mention
+                    const badUserId = mek.participant.replace('@s.whatsapp.net', '');
+
+                    // Send warning message
+                    await sock.sendMessage(remoteJid, {
+                        text: `⚠️ *HEY* @${badUserId}, *PLEASE AVOID USING BAD WORDS IN THIS GROUP.*`,
+                        mentions: [mek.participant],
+                    });
+                }
+            } catch (error) {
+                await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
+            }
         }
     }
-}
 
+    // Handle commands
+    if (msg && msg.startsWith(config.SETTINGS.prefix)) {
+        const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(" ")[0].toLowerCase();
+        const command = commands.find((cmd) => cmd.pattern === commandName);
 
-		// Handle commands
-		if (msg && msg.startsWith(config.SETTINGS.prefix)) {
-			const commandName = msg.slice(config.SETTINGS.prefix.length).trim().split(" ")[0].toLowerCase();
-			const command = commands.find((cmd) => cmd.pattern === commandName);
-	
-			if (command) {
-				try {
-					await command.execute(m, sock, mek, config, Date.now(), replyHandlers);
-				} catch (error) {
-					console.log(chalk.red("🔺 ERROR IN COMMAND EXECUTION:", error));
-					await sock.sendMessage(remoteJid, {
-						text: "❌ *ERROR*",
-					});
-				}
-			}
-		}
-	});
-	
+        if (command) {
+            try {
+                await command.execute(m, sock, mek, config, Date.now(), replyHandlers);
+            } catch (error) {
+                console.log(chalk.red("🔺 ERROR IN COMMAND EXECUTION:", error));
+                await sock.sendMessage(remoteJid, {
+                    text: "❌ *ERROR*",
+                });
+            }
+        }
+    }
+});
+
 
 	sock.ev.on('creds.update', saveCreds);
 }
