@@ -250,10 +250,13 @@ if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.inclu
                 const badUserId = senderId.replace('@s.whatsapp.net', '');
 
                 // Send warning message
-                await sock.sendMessage(remoteJid, {
+                /*await sock.sendMessage(remoteJid, {
                     text: `⚠️ *HEY* @${badUserId}, *PLEASE AVOID USING BAD WORDS IN THIS GROUP.*`,
                     mentions: [senderId],
                 });
+                */
+            } else if (isSenderAdmin && isBotAdmin){
+                sock.sendMessage(remoteJid, { react: { text: "⚠️", key: mek }});
             }
         } catch (error) {
             console.error("Error handling bad words:", error);
