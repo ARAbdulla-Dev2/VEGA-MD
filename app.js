@@ -231,8 +231,12 @@ sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
 // Auto Voice Message Handling
 if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remoteJid)) {
     const matchingEntry = Object.entries(autoVoiceConfig.voice).find(([keys, filePath]) => {
-        // Split the keys (e.g., "abcd|abcde") into individual keywords and check if any matches the message
-        return keys.split('|').some(keyword => msg.toLowerCase().includes(keyword.toLowerCase()));
+        // Split the keys (e.g., "abcd|abcde") into individual keywords
+        return keys.split('|').some(keyword => {
+            // Create a regex for exact word matching, considering word boundaries
+            const regex = new RegExp(`\\b${keyword.toLowerCase()}\\b`, 'i');
+            return regex.test(msg.toLowerCase());
+        });
     });
 
     if (matchingEntry) {
@@ -246,9 +250,8 @@ if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remo
                     mimetype: 'audio/mpeg',
                     ptt: true // Sends the audio as a voice note
                 });
-                   
-            } catch (error) {
-                console.error(`Error sending voice message for keyword "${keyword}":`, error);
+             } catch (error) {
+                console.error(`Error sending voice message for keywords "${matchedKeys}":`, error);
                 await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
             }
         } else {
@@ -256,6 +259,7 @@ if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remo
         }
     }
 }
+
 
     // Bad words filtering
 if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {
