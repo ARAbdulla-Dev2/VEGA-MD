@@ -148,6 +148,10 @@ const badwordConfig = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'data/badword.json'), 'utf-8')
 );
 
+// Load auto voice configuration
+const autoVoiceConfig = JSON.parse(fs.readFileSync('./data/autovoice.json', 'utf8'));
+
+
 	// Listen to incoming messages
 sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
     const mek = VEGAmdMsg.messages[0]?.key;
@@ -222,6 +226,36 @@ sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
         }
         return;
     }
+
+
+// Auto Voice Message Handling
+if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remoteJid)) {
+    const matchingEntry = Object.entries(autoVoiceConfig.voice).find(([keys, filePath]) => {
+        // Split the keys (e.g., "abcd|abcde") into individual keywords and check if any matches the message
+        return keys.split('|').some(keyword => msg.toLowerCase().includes(keyword.toLowerCase()));
+    });
+
+    if (matchingEntry) {
+        const [matchedKeys, voicePath] = matchingEntry;
+        const fileExists = fs.existsSync(path.resolve(voicePath));
+
+        if (fileExists) {
+            try {
+                await sock.sendMessage(remoteJid, {
+                    audio: { url: voicePath },
+                    mimetype: 'audio/mpeg',
+                    ptt: true // Sends the audio as a voice note
+                });
+                   
+            } catch (error) {
+                console.error(`Error sending voice message for keyword "${keyword}":`, error);
+                await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
+            }
+        } else {
+            console.error(`Voice file not found: ${voicePath}`);
+        }
+    }
+}
 
     // Bad words filtering
 if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {

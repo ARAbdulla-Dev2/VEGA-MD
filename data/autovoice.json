@@ -1,0 +1,14 @@
+{
+    "groups": [
+        "120363370055589780@g.us",
+        "120363326817286724@g.us"
+    ],
+    "voice": {
+        "patiyo|hi|hello|hii|hey|hay": "./src/media/audio/aa_patiyo.mp3",
+        "aluth|besam|yakada|plastic": "./src/media/audio/aluth_besam.mp3",
+        "boru|marisi": "./src/media/audio/boru_marisi.mp3",
+        "japan|sajith|anathano": "./src/media/audio/japan.mp3",
+        "kawada|kalada|kawda|kawd": "./src/media/audio/kawada_bn.mp3",
+        "kiyanna|kiyanne|kiyahan|kiyam|kiya": "./src/media/audio/kiyannema_na.mp3"
+    }
+}

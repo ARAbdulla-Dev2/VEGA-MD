@@ -36,6 +36,7 @@ let SETTINGS = {
     prefix: process.env.PREFIX,
     alwaysonline: process.env.ALWAYS_ONLINE,
     antibadwords: process.env.ANTI_BAD_WORDS,
+    autovoice: process.env.AUTO_VOICE,
 }
 
 module.exports = {
