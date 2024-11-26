@@ -21,27 +21,49 @@ cmd({
     type: "group",
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
-        if (mek.remoteJid.endsWith('@g.us')) {
-            const groupMetadata = await sock.groupMetadata(mek.remoteJid);
-            const participants = groupMetadata.participants;
-            const bot = participants.find(participant => participant.id === sock.user.id);
-            const user = participants.find(participant => participant.id === mek.participant);
+        try {
+            if (mek.remoteJid.endsWith('@g.us')) {
+                const groupMetadata = await sock.groupMetadata(mek.remoteJid);
+                const participants = groupMetadata.participants;
+                const bot = participants.find(participant => participant.id === sock.user.id);
+                const user = participants.find(participant => participant.id === mek.participant);
 
-            if (!bot || !isAdmin(bot)) {
-                await sock.sendMessage(mek.remoteJid, {text: '*I need to be an admin to use this command.* ❌'}, {quoted: m});
-                return;
+                if (!bot || !isAdmin(bot)) {
+                    await sock.sendMessage(
+                        mek.remoteJid,
+                        { text: '*I need to be an admin to use this command.* ❌' },
+                        { quoted: m }
+                    );
+                    return;
+                }
+
+                if (!user || !isAdmin(user)) {
+                    await sock.sendMessage(
+                        mek.remoteJid,
+                        { text: '*Only group admins can use this command.* ❌' },
+                        { quoted: m }
+                    );
+                    return;
+                }
+
+                await sock.groupSettingUpdate(mek.remoteJid, 'announcement');
+                await sock.sendMessage(mek.remoteJid, { text: '*Group has been muted. Only admins can send messages.* ✅' });
+            } else {
+                await sock.sendMessage(
+                    mek.remoteJid,
+                    { text: '*The command can be used only in groups.* ❌' },
+                    { quoted: m }
+                );
             }
+        } catch (error) {
+            await sock.sendMessage(
+                mek.remoteJid,
+                { text: '*Failed to mute the group. Please try again.* ❌' },
+                { quoted: m }
+            );
 
-            if (!user || !isAdmin(user)) {
-                await sock.sendMessage(mek.remoteJid, {text: '*Only group admins can use this command.* ❌'}, {quoted: m});
-                return;
-            }
-
-            await sock.groupSettingUpdate(mek.remoteJid, 'announcement');
-        } else {
-            await sock.sendMessage(mek.remoteJid, {text: '*The command can be used only in groups.* ❌'}, {quoted: m});
         }
-    }
+    },
 });
 
 // Unmute command
@@ -51,27 +73,48 @@ cmd({
     type: "group",
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
-        if (mek.remoteJid.endsWith('@g.us')) {
-            const groupMetadata = await sock.groupMetadata(mek.remoteJid);
-            const participants = groupMetadata.participants;
-            const bot = participants.find(participant => participant.id === sock.user.id);
-            const user = participants.find(participant => participant.id === mek.participant);
+        try {
+            if (mek.remoteJid.endsWith('@g.us')) {
+                const groupMetadata = await sock.groupMetadata(mek.remoteJid);
+                const participants = groupMetadata.participants;
+                const bot = participants.find(participant => participant.id === sock.user.id);
+                const user = participants.find(participant => participant.id === mek.participant);
 
-            if (!bot || !isAdmin(bot)) {
-                await sock.sendMessage(mek.remoteJid, {text: '*I need to be an admin to use this command.* ❌'}, {quoted: m});
-                return;
+                if (!bot || !isAdmin(bot)) {
+                    await sock.sendMessage(
+                        mek.remoteJid,
+                        { text: '*I need to be an admin to use this command.* ❌' },
+                        { quoted: m }
+                    );
+                    return;
+                }
+
+                if (!user || !isAdmin(user)) {
+                    await sock.sendMessage(
+                        mek.remoteJid,
+                        { text: '*Only group admins can use this command.* ❌' },
+                        { quoted: m }
+                    );
+                    return;
+                }
+
+                await sock.groupSettingUpdate(mek.remoteJid, 'not_announcement');
+                await sock.sendMessage(mek.remoteJid, { text: '*Group has been unmuted. Everyone can send messages.* ✅' });
+            } else {
+                await sock.sendMessage(
+                    mek.remoteJid,
+                    { text: '*The command can be used only in groups.* ❌' },
+                    { quoted: m }
+                );
             }
-
-            if (!user || !isAdmin(user)) {
-                await sock.sendMessage(mek.remoteJid, {text: '*Only group admins can use this command.* ❌'}, {quoted: m});
-                return;
-            }
-
-            await sock.groupSettingUpdate(mek.remoteJid, 'not_announcement');
-        } else {
-            await sock.sendMessage(mek.remoteJid, {text: '*The command can be used only in groups.* ❌'}, {quoted: m});
+        } catch (error) {
+            await sock.sendMessage(
+                mek.remoteJid,
+                { text: '*Failed to unmute the group. Please try again.* ❌' },
+                { quoted: m }
+            );
         }
-    }
+    },
 });
 
 module.exports = commands, { cmd };
