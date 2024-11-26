@@ -218,20 +218,32 @@ function formatUserId(userId) {
 // Wid command
 cmd({
     pattern: "wid",
-    description: "Get the user's or group's WA-ID.",
+    description: "Get the WA-ID of a user or group.",
     type: "misc",
     isPremium: false,
     execute: async (m, sock, mek, config, startTime, sendButtonMessage) => {
-        if (m.message.extendedTextMessage && m.message.extendedTextMessage.contextInfo && m.message.extendedTextMessage.contextInfo.remoteJid){
-            if (!m.message.extendedTextMessage.contextInfo.participant){
-                sock.sendMessage(mek.remoteJid, {text: m.message.extendedTextMessage.contextInfo.remoteJid});
-            } else if (m.message.extendedTextMessage.contextInfo.participant){
-                sock.sendMessage(mek.remoteJid, {text: m.message.extendedTextMessage.contextInfo.participant});
+        try {
+            let wid;
+
+            // Check for a quoted message
+            if (m.message?.extendedTextMessage?.contextInfo?.quotedMessage) {
+                wid = m.message.extendedTextMessage.contextInfo.participant;
             }
-        } else {
-            sock.sendMessage(mek.remoteJid, {text: mek.remoteJid});
+            // Check for mentions in the message
+            else if (m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
+                wid = m.message.extendedTextMessage.contextInfo.mentionedJid[0];
+            }
+            // Default to the group ID or sender ID
+            else {
+                wid = mek.remoteJid;
+            }
+
+            // Send the WA-ID as a response
+            await sock.sendMessage(mek.remoteJid, { text: `${wid}` }, { quoted: m });
+        } catch (error) {
+            await sock.sendMessage(mek.remoteJid, { text: "*❌ Error while fetching WA-ID.*" }, { quoted: m });
         }
-    }
+    },
 });
 
 

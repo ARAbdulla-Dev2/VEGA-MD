@@ -25,7 +25,7 @@ cmd({
             if (mek.remoteJid.endsWith('@g.us')) {
                 const groupMetadata = await sock.groupMetadata(mek.remoteJid);
                 const participants = groupMetadata.participants;
-                const bot = participants.find(participant => participant.id === sock.user.id);
+                const bot = participants.find(participant => participant.id === sock.user.id.split(':')[0] + '@s.whatsapp.net');
                 const user = participants.find(participant => participant.id === mek.participant);
 
                 if (!bot || !isAdmin(bot)) {
@@ -77,7 +77,7 @@ cmd({
             if (mek.remoteJid.endsWith('@g.us')) {
                 const groupMetadata = await sock.groupMetadata(mek.remoteJid);
                 const participants = groupMetadata.participants;
-                const bot = participants.find(participant => participant.id === sock.user.id);
+                const bot = participants.find(participant => participant.id === sock.user.id.split(':')[0] + '@s.whatsapp.net');
                 const user = participants.find(participant => participant.id === mek.participant);
 
                 if (!bot || !isAdmin(bot)) {
