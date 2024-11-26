@@ -18,7 +18,10 @@ cmd({
     type: "extra",
     execute: async (m, sock, mek, config, startTime, replyHandlers) => {
         const remoteJid = mek?.remoteJid;
-        const userQuery = m.message.conversation.split(" ").slice(1).join(" ").trim();
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        args.shift(); // Remove the command itself
+        const userQuery = args.join(" ").trim();
 
         if (!userQuery) {
             await sock.sendMessage(remoteJid, { text: "❌ Please provide a movie name to search." });
