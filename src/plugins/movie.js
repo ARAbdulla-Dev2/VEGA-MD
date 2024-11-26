@@ -1,4 +1,7 @@
-const axios = require('axios');
+const axios = require("axios");
+const https = require("https");
+const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
+
 
 global.commands = [];
 
@@ -28,7 +31,7 @@ cmd({
             return;
         }
 
-        // Updated API base domain
+        // API base URL
         const apiBase = "http://103.195.101.44:2662/";
 
         // APIs to search
@@ -38,13 +41,22 @@ cmd({
             `${apiBase}api?apiKey=ardevfa6456bc09a877cb&plugin=isaidubta&query=${encodeURIComponent(userQuery)}`
         ];
 
+        // Create an instance of axios with the custom httpsAgent
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false // Disable SSL certificate validation
+    })
+  });
+  
+  
+
         // Function to fetch data from APIs
         const fetchMovies = async () => {
             const results = [];
             for (const api of apis) {
                 try {
-                    const response = await axios.get(api, { timeout: 10000 }); // 10-second timeout
-                    if (response.data.status === "true" && Array.isArray(response.data.result)) {
+                    const response = await axiosInstance.get(api);
+                    if (response.data?.status === "true" && Array.isArray(response.data.result)) {
                         response.data.result.forEach((movie) => {
                             // Filter only 720p movies for isaiduben and isaidubta
                             if (
@@ -62,7 +74,10 @@ cmd({
                         });
                     }
                 } catch (error) {
-                    console.log(`Error fetching data from API: ${api}`, error.message);
+                    console.error(`Error fetching data from API: ${api}`, {
+                        message: error.message,
+                        stack: error.stack
+                    });
                 }
             }
             return results;
@@ -105,7 +120,5 @@ cmd({
         saveReplyHandlers(replyHandlers); // Save reply handlers for persistence
     },
 });
-
-
 
 module.exports = commands, { cmd };
