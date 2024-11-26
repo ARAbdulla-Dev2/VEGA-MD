@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const https = require('https');
 const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
 
 global.commands = [];
