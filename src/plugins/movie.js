@@ -18,21 +18,21 @@ cmd({
     type: "extra",
     execute: async (m, sock, mek, config, startTime, replyHandlers) => {
         const remoteJid = mek?.remoteJid;
-        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
-        const args = msgText.trim().split(" ");
-        args.shift(); // Remove the command itself
-        const userQuery = args.join(" ").trim();
+        const userQuery = m.message.conversation.split(" ").slice(1).join(" ").trim();
 
         if (!userQuery) {
             await sock.sendMessage(remoteJid, { text: "❌ Please provide a movie name to search." });
             return;
         }
 
+        // Updated API base domain
+        const apiBase = "http://103.195.101.44:2662/";
+
         // APIs to search
         const apis = [
-            `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=sin&query=${encodeURIComponent(userQuery)}`,
-            `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=isaiduben&query=${encodeURIComponent(userQuery)}`,
-            `https://api.arabdullah.top/api?apiKey=ardevfa6456bc09a877cb&plugin=isaidubta&query=${encodeURIComponent(userQuery)}`
+            `${apiBase}api?apiKey=ardevfa6456bc09a877cb&plugin=sin&query=${encodeURIComponent(userQuery)}`,
+            `${apiBase}api?apiKey=ardevfa6456bc09a877cb&plugin=isaiduben&query=${encodeURIComponent(userQuery)}`,
+            `${apiBase}api?apiKey=ardevfa6456bc09a877cb&plugin=isaidubta&query=${encodeURIComponent(userQuery)}`
         ];
 
         // Function to fetch data from APIs
@@ -40,7 +40,7 @@ cmd({
             const results = [];
             for (const api of apis) {
                 try {
-                    const response = await axios.get(api);
+                    const response = await axios.get(api, { timeout: 10000 }); // 10-second timeout
                     if (response.data.status === "true" && Array.isArray(response.data.result)) {
                         response.data.result.forEach((movie) => {
                             // Filter only 720p movies for isaiduben and isaidubta
@@ -59,7 +59,7 @@ cmd({
                         });
                     }
                 } catch (error) {
-                    console.log(`Error fetching data from API: ${api}`, error);
+                    console.log(`Error fetching data from API: ${api}`, error.message);
                 }
             }
             return results;
@@ -102,6 +102,7 @@ cmd({
         saveReplyHandlers(replyHandlers); // Save reply handlers for persistence
     },
 });
+
 
 
 module.exports = commands, { cmd };
