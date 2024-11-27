@@ -21,6 +21,7 @@ const {
 	saveReplyHandlers,
 	clearReplyHandlers
 } = require("./utils/replyHandlerUtil");
+const { MongoClient } = require("mongodb");
 
 clearReplyHandlers();
 
@@ -35,6 +36,25 @@ fs.readdirSync('./src/plugins').forEach(file => {
 		commands = commands.concat(pluginCommands);
 	}
 });
+
+const url = config.SETTINGS.mongodb; // MongoDB connection URL from settings
+const client = new MongoClient(url);
+
+let db;
+
+const connectDB = async () => {
+    if (!db) {
+        try {
+            await client.connect();
+            db = client.db("botDatabase"); // Replace with your desired DB name
+            console.log("Connected to MongoDB!");
+        } catch (error) {
+            console.error("Error connecting to MongoDB:", error);
+            process.exit(1);
+        }
+    }
+    return db;
+};
 
 const startTime = moment().tz(config.SETTINGS.region).format('YYYYMMDDHHmmss');
 
@@ -143,13 +163,28 @@ async function VEGAmdSock() {
     .filter(word => word.length > 0);
 	let replyHandlers = loadReplyHandlers();
 
-	// Load allowed groups from badword.json
-const badwordConfig = JSON.parse(
-    fs.readFileSync(path.join(__dirname, 'data/badword.json'), 'utf-8')
-);
+	const getBadwordConfig = async () => {
+        const db = await connectDB();
+        const badwordCollection = db.collection("badwordConfig"); // Replace with your collection name
+        const config = await badwordCollection.findOne({ name: "badword" }); // Customizable query
+        return config || { groups: [] }; // Fallback if no config found
+    };
+    
+    const getAutoVoiceConfig = async () => {
+        // Fetch groups from MongoDB
+        const db = await connectDB();
+        const autoVoiceCollection = db.collection("autoVoiceConfig");
+        const dbConfig = await autoVoiceCollection.findOne({ name: "autoVoice" }) || { groups: [] };
+    
+        // Load voice configuration from JSON
+        const jsonPath = path.resolve('data/autovoice.json');
+        const fileData = fs.existsSync(jsonPath) ? JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) : { voice: {} };
+    
+        return { groups: dbConfig.groups, voice: fileData.voice };
+    };
 
-// Load auto voice configuration
-const autoVoiceConfig = JSON.parse(fs.readFileSync('./data/autovoice.json', 'utf8'));
+    const badwordConfig = await getBadwordConfig();
+    const autoVoiceConfig = await getAutoVoiceConfig();
 
 
 	// Listen to incoming messages
@@ -228,39 +263,35 @@ sock.ev.on("messages.upsert", async (VEGAmdMsg) => {
     }
 
 
-// Auto Voice Message Handling
-if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remoteJid)) {
-    const matchingEntry = Object.entries(autoVoiceConfig.voice).find(([keys, filePath]) => {
-        // Split the keys (e.g., "abcd|abcde") into individual keywords
-        return keys.split('|').some(keyword => {
-            // Create a regex for exact word matching, considering word boundaries
-            const regex = new RegExp(`\\b${keyword.toLowerCase()}\\b`, 'i');
-            return regex.test(msg.toLowerCase());
+    if (config.SETTINGS.autovoice && isGroup && autoVoiceConfig.groups.includes(remoteJid)) {
+        const matchingEntry = Object.entries(autoVoiceConfig.voice).find(([keys, filePath]) => {
+            return keys.split('|').some(keyword => {
+                const regex = new RegExp(`\\b${keyword.toLowerCase()}\\b`, 'i');
+                return regex.test(msg.toLowerCase());
+            });
         });
-    });
-
-    if (matchingEntry) {
-        const [matchedKeys, voicePath] = matchingEntry;
-        const fileExists = fs.existsSync(path.resolve(voicePath));
-
-        if (fileExists) {
-            try {
-                await sock.sendMessage(remoteJid, {
-                    audio: { url: voicePath },
-                    mimetype: 'audio/mpeg',
-                    ptt: true // Sends the audio as a voice note
-                });
-             } catch (error) {
-                console.error(`Error sending voice message for keywords "${matchedKeys}":`, error);
-                await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
+    
+        if (matchingEntry) {
+            const [matchedKeys, voicePath] = matchingEntry;
+            const fileExists = fs.existsSync(path.resolve(voicePath));
+    
+            if (fileExists) {
+                try {
+                    await sock.sendMessage(remoteJid, {
+                        audio: { url: voicePath },
+                        mimetype: 'audio/mpeg',
+                        ptt: true
+                    });
+                } catch (error) {
+                    console.error(`Error sending voice message for keywords "${matchedKeys}":`, error);
+                    await sock.sendMessage(remoteJid, { text: '❌ *ERROR*' });
+                }
+            } else {
+                console.error(`Voice file not found: ${voicePath}`);
             }
-        } else {
-            console.error(`Voice file not found: ${voicePath}`);
         }
     }
-}
-
-
+    
     // Bad words filtering
 if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.includes(remoteJid)) {
     const containsBadWords = badWords.some(word => msg.toLowerCase().includes(word.toLowerCase()));
@@ -270,12 +301,23 @@ if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.inclu
             // Fetch group metadata to check admin status
             const groupMetadata = await sock.groupMetadata(remoteJid);
             const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+
+            // Check if the sender is the bot
+            const senderId = mek.participant;
+            const isBotSender = senderId === botNumber;
+
+            // Skip bad word filtering if the message is from the bot itself
+            if (isBotSender) {
+                console.log("Skipping bad word check for bot's own message.");
+                return;
+            }
+
+            // Check if the bot is an admin
             const isBotAdmin = groupMetadata.participants.some(
                 p => p.id === botNumber && (p.admin === 'admin' || p.admin === 'superadmin')
             );
 
             // Check if the sender is an admin
-            const senderId = mek.participant;
             const isSenderAdmin = groupMetadata.participants.some(
                 p => p.id === senderId && (p.admin === 'admin' || p.admin === 'superadmin')
             );
@@ -288,13 +330,12 @@ if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.inclu
                 const badUserId = senderId.replace('@s.whatsapp.net', '');
 
                 // Send warning message
-                /*await sock.sendMessage(remoteJid, {
+                await sock.sendMessage(remoteJid, {
                     text: `⚠️ *HEY* @${badUserId}, *PLEASE AVOID USING BAD WORDS IN THIS GROUP.*`,
                     mentions: [senderId],
                 });
-                */
-            } else if (isSenderAdmin && isBotAdmin){
-                sock.sendMessage(remoteJid, { react: { text: "⚠️", key: mek }});
+            } else if (isSenderAdmin && isBotAdmin) {
+                sock.sendMessage(remoteJid, { react: { text: "⚠️", key: mek } });
             }
         } catch (error) {
             console.error("Error handling bad words:", error);
@@ -302,6 +343,7 @@ if (config.SETTINGS.antibadwords && isGroup && msg && badwordConfig.groups.inclu
         }
     }
 }
+
 
     // Handle commands
     if (msg && msg.startsWith(config.SETTINGS.prefix)) {

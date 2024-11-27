@@ -4,6 +4,28 @@ const path = require('path');
 const axios = require('axios');
 const https = require('https');
 const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
+const { MongoClient } = require("mongodb");
+const config = require('../../config');
+
+const url = config.SETTINGS.mongodb; // MongoDB connection URL from settings
+const client = new MongoClient(url);
+
+let db;
+
+const connectDB = async () => {
+    if (!db) {
+        try {
+            await client.connect();
+            db = client.db("botDatabase"); // Replace with your desired DB name
+            console.log("Connected to MongoDB!");
+        } catch (error) {
+            console.error("Error connecting to MongoDB:", error);
+            process.exit(1);
+        }
+    }
+    return db;
+};
+
 
 global.commands = [];
 
@@ -227,6 +249,98 @@ cmd({
         }
     },
 });
+
+cmd({
+    pattern: "antibadword",
+    description: "Add or remove group IDs to/from the badword list.",
+    type: "owner",
+    execute: async (m, sock, mek, config) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        const action = args[1]?.toLowerCase(); // 'add' or 'remove'
+        const groupIds = args.slice(2); // Remaining arguments are group IDs
+
+        if (!action || !['addgroup', 'removegroup'].includes(action)) {
+            await sock.sendMessage(mek.remoteJid, { text: "❗ Use `.antibadword add [group_id]` or `.antibadword remove [group_id]`." });
+            return;
+        }
+
+        if (!groupIds.length) {
+            await sock.sendMessage(mek.remoteJid, { text: "❌ No group IDs provided." });
+            return;
+        }
+
+        try {
+            const db = await connectDB();
+            const badwordCollection = db.collection("badwordConfig");
+
+            if (action === "addgroup") {
+                await badwordCollection.updateOne(
+                    { name: "badword" },
+                    { $addToSet: { groups: { $each: groupIds } } },
+                    { upsert: true }
+                );
+                await sock.sendMessage(mek.remoteJid, { text: `✅ Added groups: ${groupIds.join(", ")}` });
+            } else if (action === "removegroup") {
+                await badwordCollection.updateOne(
+                    { name: "badword" },
+                    { $pull: { groups: { $in: groupIds } } }
+                );
+                await sock.sendMessage(mek.remoteJid, { text: `✅ Removed groups: ${groupIds.join(", ")}` });
+            }
+        } catch (error) {
+            console.error("Error in antibadword command:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to update the badword list. Please try again." });
+        }
+    },
+});
+
+
+cmd({
+    pattern: "autovoice",
+    description: "Manage auto-voice groups.",
+    type: "owner",
+    execute: async (m, sock, mek, config) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        const action = args[1]?.toLowerCase(); // 'addgroup' or 'removegroup'
+
+        if (!action || !['addgroup', 'removegroup'].includes(action)) {
+            await sock.sendMessage(mek.remoteJid, { text: "❗ Use `.autovoice addgroup [group_id]` or `.autovoice removegroup [group_id]`." });
+            return;
+        }
+
+        const groupId = args[2];
+        if (!groupId) {
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Please specify a group ID." });
+            return;
+        }
+
+        try {
+            const db = await connectDB();
+            const autoVoiceCollection = db.collection("autoVoiceConfig");
+
+            if (action === "addgroup") {
+                await autoVoiceCollection.updateOne(
+                    { name: "autoVoice" },
+                    { $addToSet: { groups: groupId } },
+                    { upsert: true }
+                );
+                await sock.sendMessage(mek.remoteJid, { text: `✅ Group added to auto-voice: ${groupId}` });
+            } else if (action === "removegroup") {
+                await autoVoiceCollection.updateOne(
+                    { name: "autoVoice" },
+                    { $pull: { groups: groupId } }
+                );
+                await sock.sendMessage(mek.remoteJid, { text: `✅ Group removed from auto-voice: ${groupId}` });
+            }
+        } catch (error) {
+            console.error("Error in autovoice group management:", error);
+            await sock.sendMessage(mek.remoteJid, { text: "❌ Failed to update auto-voice groups. Please try again." });
+        }
+    },
+});
+
 
 
 // forward command

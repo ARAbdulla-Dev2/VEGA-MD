@@ -27,6 +27,7 @@
     "dotenv": "^16.4.5",
     "https": "^1.0.0",
     "moment-timezone": "^0.5.46",
+    "mongodb": "^6.11.0",
     "node-fetch": "^2.4.0",
     "os": "^0.1.2",
     "pino": "^9.5.0",
