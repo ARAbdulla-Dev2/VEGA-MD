@@ -1,4 +1,8 @@
 {
+    "groups": [
+        "120363370055589780@g.us",
+        "120363326817286724@g.us"
+    ],
     "voice": {
         "patiyo|hi|hello|hii|hey|hay": "./src/media/audio/aa_patiyo.mp3",
         "aluth|besam|yakada|plastic": "./src/media/audio/aluth_besam.mp3",
