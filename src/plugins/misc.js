@@ -17,6 +17,67 @@ function cmd(command) {
     commands.push(command);
 }
 
+
+cmd({
+    pattern: "ali",
+    description: "Fetch product data from AliExpress using the provided URL.",
+    type: "utility",
+    execute: async (m, sock, mek) => {
+        const msgText = m.message.conversation || m.message.extendedTextMessage?.text || "";
+        const args = msgText.trim().split(" ");
+        args.shift(); // Remove the command itself
+
+        if (!args[0]) {
+            await sock.sendMessage(m.chat, { text: "Please provide a valid AliExpress URL." });
+            return;
+        }
+
+        const url = args[0];
+
+        try {
+            // Fetch the HTML content of the provided URL
+            const response = await axios.get(url);
+            const html = response.data;
+
+            // Load the HTML into cheerio
+            const $ = cheerio.load(html);
+
+            // Extract the necessary data
+            const imageUrl = $('img.magnifier--image--EYYoSlr').attr('src');
+            const price = $('span.price--currentPriceText--V8_y_b5').text().trim();
+            const originalPrice = $('span.price--originalText--gxVO5_d').text().trim();
+            const discount = $('span.price--discount--Y9uG2LK').text().trim();
+            const title = $('h1[data-pl="product-title"]').text().trim();
+            const rating = $('div.reviewer--box--wVguYsD strong').text().trim();
+
+            // Validate extracted data
+            if (!imageUrl || !price || !title) {
+                await sock.sendMessage(m.chat, { text: "Failed to extract product data. Please check the URL and try again." });
+                return;
+            }
+
+            // Build the caption
+            const caption = `
+*Title:* ${title}
+*Price:* ${price}
+*Original Price:* ${originalPrice} (${discount})
+*Rating:* ${rating}
+*URL:* ${url}
+            `;
+
+            // Send the image with caption
+            await sock.sendMessage(m.chat, {
+                image: { url: imageUrl },
+                caption,
+            });
+        } catch (error) {
+            console.error(error);
+            await sock.sendMessage(m.chat, { text: "An error occurred while fetching the product data. Please try again." });
+        }
+    },
+});
+
+
 cmd({
     pattern: "movie",
     description: "Search and download movies.",
