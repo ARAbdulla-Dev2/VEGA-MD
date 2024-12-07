@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const https = require('https');
+const cheerio = require('cheerio');
 const { loadReplyHandlers, saveReplyHandlers, clearReplyHandlers } = require("../../utils/replyHandlerUtil");
 
 global.commands = [];
@@ -28,7 +29,7 @@ cmd({
         args.shift(); // Remove the command itself
 
         if (!args[0]) {
-            await sock.sendMessage(m.chat, { text: "Please provide a valid AliExpress URL." });
+            await sock.sendMessage(mek.remoteJid, { text: "Please provide a valid AliExpress URL." });
             return;
         }
 
@@ -52,7 +53,7 @@ cmd({
 
             // Validate extracted data
             if (!imageUrl || !price || !title) {
-                await sock.sendMessage(m.chat, { text: "Failed to extract product data. Please check the URL and try again." });
+                await sock.sendMessage(mek.remoteJid, { text: "Failed to extract product data. Please check the URL and try again." });
                 return;
             }
 
@@ -66,13 +67,13 @@ cmd({
             `;
 
             // Send the image with caption
-            await sock.sendMessage(m.chat, {
+            await sock.sendMessage(mek.remoteJid, {
                 image: { url: imageUrl },
                 caption,
             });
         } catch (error) {
             console.error(error);
-            await sock.sendMessage(m.chat, { text: "An error occurred while fetching the product data. Please try again." });
+            await sock.sendMessage(mek.remoteJid, { text: "An error occurred while fetching the product data. Please try again." });
         }
     },
 });
